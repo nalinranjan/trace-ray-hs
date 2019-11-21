@@ -24,6 +24,8 @@ dependencies:
 - bmp
 - ply-loader
 - linear
+- yaml
+- text
 
 library:
   source-dirs: src

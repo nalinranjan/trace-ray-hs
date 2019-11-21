@@ -4,7 +4,7 @@ cabal-version: 1.12
 --
 -- see: https://github.com/sol/hpack
 --
--- hash: bcf8f49c51e8b0d25be92f536e3097aa3773cee1ee07289ca6804e7d62e04763
+-- hash: 4976831c3696e987923542a7b0d5e72301937c3e88db0a1b4566f757f43dcc7e
 
 name:           trace-ray-hs
 version:        0.1.0.0
@@ -38,6 +38,8 @@ library
     , bmp
     , linear
     , ply-loader
+    , text
+    , yaml
   default-language: Haskell2010
 
 executable trace-ray-hs-exe
@@ -53,7 +55,9 @@ executable trace-ray-hs-exe
     , bmp
     , linear
     , ply-loader
+    , text
     , trace-ray-hs
+    , yaml
   default-language: Haskell2010
 
 test-suite trace-ray-hs-test
@@ -69,5 +73,7 @@ test-suite trace-ray-hs-test
     , bmp
     , linear
     , ply-loader
+    , text
     , trace-ray-hs
+    , yaml
   default-language: Haskell2010
