@@ -26,6 +26,8 @@ dependencies:
 - linear
 - yaml
 - text
+- colour >= 2.3.5
+- vector
 
 library:
   source-dirs: src
