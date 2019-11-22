@@ -4,7 +4,7 @@ cabal-version: 1.12
 --
 -- see: https://github.com/sol/hpack
 --
--- hash: d672dfa05b92bd19cfd755c8383837eb0f4ae9ab6aef12c5aa5c8158570ca1e3
+-- hash: 84dcc9a8e11e7e95fc5249d85c093136a4b9e4c5d44d65deeff214cd3bbd9ca8
 
 name:           trace-ray-hs
 version:        0.1.0.0
@@ -29,6 +29,7 @@ library
   exposed-modules:
       Main
       Math3D
+      Mesh
       Scene
   other-modules:
       Paths_trace_ray_hs
@@ -49,6 +50,7 @@ executable trace-ray-hs-exe
   main-is: Main.hs
   other-modules:
       Math3D
+      Mesh
       Scene
       Paths_trace_ray_hs
   hs-source-dirs:

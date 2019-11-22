@@ -5,6 +5,8 @@ import           Scene
 import           Linear
 import           Linear.Matrix
 import           Linear.Projection
+-- import           Data.Vector.Storable (Vector)
+import           Data.Vector as Vec
 
 
 data Ray =
@@ -12,7 +14,7 @@ data Ray =
     { rOrigin    :: V3 Float
     , rDirection :: V3 Float
     }
-  deriving (Eq, Show)
+  deriving (Eq, Show)  
 
 viewMatrix :: CameraDesc -> M44 Float
 viewMatrix camera = lookAt e l u

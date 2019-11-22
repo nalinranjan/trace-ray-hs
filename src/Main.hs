@@ -5,6 +5,7 @@ module Main where
 
 import           Math3D
 import           Scene
+import           Mesh
 
 import           Codec.BMP
 import           Data.Colour
@@ -24,7 +25,11 @@ main = do
     --   putStrLn $ show (sViewPlane sd)
     --   putStrLn $ show (sAmbient sd)
     --   putStrLn $ show (sLights sd)
-      putStrLn $ show (sObjects sd)
       putStrLn "\n"
       putStrLn $ show $ viewMatrix $ sCamera sd
       putStrLn $ show $ projectionMatrix $ sViewPlane sd
+      let os = sObjects sd
+      putStrLn $ show os
+      putStrLn "\n"
+      mesh <- loadMesh (oPath $ os !! 0)
+      putStrLn $ show mesh

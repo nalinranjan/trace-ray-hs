@@ -13,15 +13,15 @@ import           Linear.Quaternion
 
 instance Yaml.FromJSON (V3 Float) where
   parseJSON (Yaml.String s) = return (read (Text.unpack s))
-  parseJSON _               = fail "expected string V3"
+  parseJSON _               = fail "expected string for V3"
 
 instance Yaml.FromJSON (RGB Float) where
   parseJSON (Yaml.String s) = return (read (Text.unpack s))
-  parseJSON _               = fail "expected string RGB"
+  parseJSON _               = fail "expected string for RGB"
 
 instance Yaml.FromJSON (Quaternion Float) where
   parseJSON (Yaml.String s) = return (read (Text.unpack s))
-  parseJSON _               = fail "expected string Quaternion"
+  parseJSON _               = fail "expected string for Quaternion"
 
 data CameraDesc =
   CameraDesc
