@@ -4,7 +4,7 @@ cabal-version: 1.12
 --
 -- see: https://github.com/sol/hpack
 --
--- hash: b3534df3880f8af0594eba1601903de4368c8b82cef9cb6dfd105d16a57a295c
+-- hash: d672dfa05b92bd19cfd755c8383837eb0f4ae9ab6aef12c5aa5c8158570ca1e3
 
 name:           trace-ray-hs
 version:        0.1.0.0
@@ -28,6 +28,7 @@ source-repository head
 library
   exposed-modules:
       Main
+      Math3D
       Scene
   other-modules:
       Paths_trace_ray_hs
@@ -37,7 +38,7 @@ library
       base >=4.7 && <5
     , bmp
     , colour >=2.3.5
-    , linear
+    , linear >=1.20.9
     , ply-loader
     , text
     , vector
@@ -47,6 +48,7 @@ library
 executable trace-ray-hs-exe
   main-is: Main.hs
   other-modules:
+      Math3D
       Scene
       Paths_trace_ray_hs
   hs-source-dirs:
@@ -56,7 +58,7 @@ executable trace-ray-hs-exe
       base >=4.7 && <5
     , bmp
     , colour >=2.3.5
-    , linear
+    , linear >=1.20.9
     , ply-loader
     , text
     , trace-ray-hs
@@ -76,7 +78,7 @@ test-suite trace-ray-hs-test
       base >=4.7 && <5
     , bmp
     , colour >=2.3.5
-    , linear
+    , linear >=1.20.9
     , ply-loader
     , text
     , trace-ray-hs

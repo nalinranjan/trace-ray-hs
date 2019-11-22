@@ -23,7 +23,7 @@ dependencies:
 - base >= 4.7 && < 5
 - bmp
 - ply-loader
-- linear
+- linear >= 1.20.9
 - yaml
 - text
 - colour >= 2.3.5

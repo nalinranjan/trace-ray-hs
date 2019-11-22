@@ -30,5 +30,5 @@ objects:
           diffuseColor: RGB {channelRed = 1.0, channelGreen = 1.0, channelBlue = 1.0}
       transform:
           translation: V3 0 0 0
-          rotation: V3 0.75 0 0
+          rotation: Quaternion 0.93 (V3 0.366 0 0)
           scale: V3 100 100 100
