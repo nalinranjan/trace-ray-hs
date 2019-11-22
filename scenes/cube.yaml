@@ -6,6 +6,7 @@ camera:
 viewPlane:
     width: 800
     height: 800
+    dist: 200
     maxDepth: 10
 
 bgColor: RGB {channelRed = 0.0, channelGreen = 0.0, channelBlue = 0.0}

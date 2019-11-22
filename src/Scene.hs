@@ -33,6 +33,7 @@ instance Yaml.FromJSON CameraDesc where
 data ViewPlaneDesc = 
   ViewPlaneDesc { vWcolor :: Int
                 , vHeight :: Int
+                , vDist :: Int
                 , vMaxDepth :: Int
                 }
   deriving (Eq, Show)
@@ -41,6 +42,7 @@ instance Yaml.FromJSON ViewPlaneDesc where
   parseJSON (Yaml.Object vpd) =
     ViewPlaneDesc <$> vpd Yaml..: "width"
                   <*> vpd Yaml..: "height"
+                  <*> vpd Yaml..: "dist"
                   <*> vpd Yaml..: "maxDepth"
   parseJSON _ = fail "Expected object for ViewPlaneDesc"
 
