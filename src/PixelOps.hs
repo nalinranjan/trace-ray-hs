@@ -13,3 +13,6 @@ rgbToByteString (RGB r g b) = pack $ Prelude.map floatToWord8 [r,g,b,1.0]
 
 replicateBS :: Int -> ByteString -> ByteString
 replicateBS n bs = BS.concat $ Prelude.replicate n bs
+
+listRgbToByteString :: [RGB Float] -> ByteString
+listRgbToByteString rgbList = BS.concat $ Prelude.map rgbToByteString rgbList

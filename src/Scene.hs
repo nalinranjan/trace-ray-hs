@@ -41,7 +41,7 @@ data ViewPlaneDesc =
   ViewPlaneDesc
     { vWidth    :: Int
     , vHeight   :: Int
-    , vDist     :: Int
+    , vDist     :: Float
     , vMaxDepth :: Int
     }
   deriving (Eq, Show)
@@ -81,12 +81,15 @@ instance Yaml.FromJSON LightDesc where
     ld Yaml..: "position"
   parseJSON _ = fail "Expected object for LightDesc"
 
+instance Ord (RGB Float) where
+  (RGB r1 g1 b1) <= (RGB r2 g2 b2) = r1 <= r2 && g1 <= g2 && b1 <= b2
+
 data MaterialDesc =
   MaterialDesc
     { mType         :: String
     , mDiffuseColor :: RGB Float
     }
-  deriving (Eq, Show)
+  deriving (Eq, Show, Ord)
 
 instance Yaml.FromJSON MaterialDesc where
   parseJSON (Yaml.Object md) =

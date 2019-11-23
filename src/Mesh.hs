@@ -16,7 +16,7 @@ data VertexAttrib =
     { vPosition :: V3 Float
     , vNormal   :: V3 Float
     }
-  deriving (Eq, Show)
+  deriving (Eq, Show, Ord)
 
 data Triangle = 
   Triangle
@@ -25,7 +25,7 @@ data Triangle =
     , tV2  :: VertexAttrib
     , tMat :: MaterialDesc
     }
-  deriving (Eq, Show)
+  deriving (Eq, Show, Ord)
 
 data Mesh = 
   Mesh

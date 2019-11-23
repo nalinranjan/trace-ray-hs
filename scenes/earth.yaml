@@ -11,7 +11,7 @@ viewPlane:
 
 bgColor: RGB {channelRed = 0.0, channelGreen = 1.0, channelBlue = 0.0}
 shadows: true
-outputFile: renders/cube.bmp
+outputFile: renders/earth.bmp
 
 ambient:
     color: RGB {channelRed = 1.0, channelGreen = 1.0, channelBlue = 1.0}
@@ -25,20 +25,29 @@ lights:
 
 objects:
     - type: mesh
+      path: meshes/earth.ply
+      material:
+          type: matte
+          diffuseColor: RGB {channelRed = 1.0, channelGreen = 1.0, channelBlue = 1.0}
+      transform:
+          translation: V3 0 0 -1200
+          rotation: Quaternion 0.93 (V3 0.366 0 0)
+          scale: V3 500 500 500
+    - type: mesh
+      path: meshes/monkey.ply
+      material:
+          type: matte
+          diffuseColor: RGB {channelRed = 1.0, channelGreen = 0.0, channelBlue = 0.0}
+      transform:
+          translation: V3 0 -100 -700
+          rotation: Quaternion 0.995 (V3 0 0.098 0)
+          scale: V3 200 200 200
+    - type: mesh
       path: meshes/cube.ply
       material:
           type: matte
-          diffuseColor: RGB {channelRed = 0.76, channelGreen = 0.56, channelBlue = 0.96}
+          diffuseColor: RGB {channelRed = 0.86, channelGreen = 0.45, channelBlue = 0.77}
       transform:
-          translation: V3 0 0 -500
-          rotation: Quaternion 0.93 (V3 0.366 0 0)
-          scale: V3 100 100 100
-    - type: mesh
-      path: meshes/bunny_lowRes.ply
-      material:
-          type: matte
-          diffuseColor: RGB {channelRed = 0.87, channelGreen = 0.22, channelBlue = 0.0}
-      transform:
-          translation: V3 0 -500 -700
+          translation: V3 600 0 -500
           rotation: Quaternion 1 (V3 0 0 0)
           scale: V3 100 100 100
