@@ -28,6 +28,7 @@ dependencies:
 - text
 - colour >= 2.3.5
 - vector
+- bytestring
 
 library:
   source-dirs: src

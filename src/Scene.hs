@@ -125,13 +125,14 @@ instance Yaml.FromJSON ObjectDesc where
 
 data SceneDesc =
   SceneDesc
-    { sCamera    :: CameraDesc
-    , sViewPlane :: ViewPlaneDesc
-    , sBgColor   :: RGB Float
-    , sShadows   :: Bool
-    , sAmbient   :: AmbientDesc
-    , sLights    :: [LightDesc]
-    , sObjects   :: [ObjectDesc]
+    { sCamera     :: CameraDesc
+    , sViewPlane  :: ViewPlaneDesc
+    , sBgColor    :: RGB Float
+    , sShadows    :: Bool
+    , sOutputFile :: FilePath
+    , sAmbient    :: AmbientDesc
+    , sLights     :: [LightDesc]
+    , sObjects    :: [ObjectDesc]
     }
   deriving (Eq, Show)
 
@@ -140,6 +141,7 @@ instance Yaml.FromJSON SceneDesc where
     SceneDesc <$> sd Yaml..: "camera" <*> sd Yaml..: "viewPlane" <*>
     sd Yaml..: "bgColor" <*>
     sd Yaml..: "shadows" <*>
+    sd Yaml..: "outputFile" <*>
     sd Yaml..: "ambient" <*>
     sd Yaml..: "lights" <*>
     sd Yaml..: "objects"

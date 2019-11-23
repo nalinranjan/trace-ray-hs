@@ -3,8 +3,10 @@
 module Mesh where
 
 import           Scene
+import           Math3D
 
 import           Linear
+import           Linear.Matrix
 import           Data.Vector as Vec
 import           PLY
 import           PLY.Types
@@ -28,7 +30,8 @@ data Triangle =
 data Mesh = 
   Mesh
     { mVertices :: Vec.Vector VertexAttrib
-    , mIndices  :: Vec.Vector (V3 Int) 
+    -- , mIndices  :: Vec.Vector (V3 Int)
+    , mIndices  :: [V3 Int]
     }
   deriving (Eq, Show)
 
@@ -66,5 +69,28 @@ loadMesh :: FilePath -> IO Mesh
 loadMesh file = do Right vs <- loadElements "vertex" file
                    let verts = Vec.map plyVertToVertex vs
                    Right is <- loadElements "face" file
-                   let inds = Vec.map plyFaceToIndex is
+                   let inds = toList $ Vec.map plyFaceToIndex is
                    return $ Mesh verts inds
+
+
+applyTransformPoint :: M44 Float -> V3 Float -> V3 Float
+-- applyTransformPoint matrix = normalizePoint . (*! matrix) . point
+applyTransformPoint matrix = normalizePoint . (matrix !*) . point
+
+applyTransformMesh :: M44 Float -> Mesh -> Mesh
+applyTransformMesh matrix (Mesh vs is) = Mesh (Vec.map transformFunc vs) is
+  where transformFunc (VertexAttrib pos norm) = VertexAttrib (applyTransformPoint matrix pos) norm
+
+mkTriangles :: Mesh -> MaterialDesc -> [Triangle]
+mkTriangles (Mesh vs is) mat = aux vs is
+  where aux :: Vec.Vector VertexAttrib -> [V3 Int] -> [Triangle]
+        aux verts []              = []
+        aux verts ((V3 x y z):is) = Triangle (verts ! x) (verts ! y) (verts ! z) mat : aux verts is
+
+objectDescToTriangles :: M44 Float -> ObjectDesc -> IO [Triangle]
+objectDescToTriangles view od = do mesh <- loadMesh $ oPath od
+                                   let world = worldMatrix $ oTransform od
+                                      --  meshCam = applyTransformMesh (world !*! view) mesh
+                                       meshCam = applyTransformMesh (view !*! world) mesh
+                                   putStrLn $ show world
+                                   return $ mkTriangles meshCam $ oMaterial od

@@ -6,6 +6,7 @@ module Main where
 import           Math3D
 import           Scene
 import           Mesh
+import           PixelOps
 
 import           Codec.BMP
 import           Data.Colour
@@ -26,10 +27,27 @@ main = do
     --   putStrLn $ show (sAmbient sd)
     --   putStrLn $ show (sLights sd)
       putStrLn "\n"
-      putStrLn $ show $ viewMatrix $ sCamera sd
-      putStrLn $ show $ projectionMatrix $ sViewPlane sd
-      let os = sObjects sd
+      -- putStrLn $ show $ viewMatrix $ sCamera sd
+      -- putStrLn $ show $ projectionMatrix $ sViewPlane sd
+      let os   = sObjects sd
+          view = viewMatrix $ sCamera sd
+      tris <- sequence $ map (objectDescToTriangles view) os
+      putStrLn $ show view
       putStrLn $ show os
-      putStrLn "\n"
-      mesh <- loadMesh (oPath $ os !! 0)
-      putStrLn $ show mesh
+      putStrLn $ show tris
+      -- let worlds = map (worldMatrix . oTransform) os
+      -- putStrLn $ show $ worlds
+      -- putStrLn "\n"
+      -- meshes <- sequence $ map (loadMesh . oPath) os
+      -- let meshesW = zipWith applyTransformMesh worlds meshes
+      -- putStrLn $ show meshes
+      -- putStrLn "\n"
+      -- putStrLn $ show meshesW
+      let w = vWidth $ sViewPlane sd
+      let h = vHeight $ sViewPlane sd
+      let bs = replicateBS (w*h) $ rgbToByteString $ sBgColor sd
+      let bmp = packRGBA32ToBMP24 w h bs
+      writeBMP (sOutputFile sd) bmp
+      
+      
+      

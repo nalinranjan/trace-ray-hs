@@ -1,6 +1,6 @@
 camera:
-    eyePoint: V3 2.1 2.1 3
-    lookAt: V3 0 0 0
+    eyePoint: V3 0 0 0
+    lookAt: V3 0 0 -1
     up: V3 0 1 0
 
 viewPlane:
@@ -9,8 +9,9 @@ viewPlane:
     dist: 200
     maxDepth: 10
 
-bgColor: RGB {channelRed = 0.0, channelGreen = 0.0, channelBlue = 0.0}
+bgColor: RGB {channelRed = 0.0, channelGreen = 1.0, channelBlue = 0.0}
 shadows: true
+outputFile: renders/cube.bmp
 
 ambient:
     color: RGB {channelRed = 1.0, channelGreen = 1.0, channelBlue = 1.0}
@@ -29,6 +30,6 @@ objects:
           type: matte
           diffuseColor: RGB {channelRed = 1.0, channelGreen = 1.0, channelBlue = 1.0}
       transform:
-          translation: V3 0 0 0
+          translation: V3 0 0 -500
           rotation: Quaternion 0.93 (V3 0.366 0 0)
           scale: V3 100 100 100
