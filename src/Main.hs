@@ -31,7 +31,8 @@ main = do
       -- putStrLn $ show $ projectionMatrix $ sViewPlane sd
       let os   = sObjects sd
           view = viewMatrix $ sCamera sd
-      tris <- sequence $ map (objectDescToTriangles view) os
+      ts <- sequence $ map (objectDescToTriangles view) os
+      let tris = concat ts
       putStrLn $ show view
       putStrLn $ show os
       putStrLn $ show tris
