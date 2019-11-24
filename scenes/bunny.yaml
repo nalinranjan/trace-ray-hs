@@ -25,20 +25,11 @@ lights:
 
 objects:
     - type: mesh
-      path: meshes/cube.ply
-      material:
-          type: matte
-          diffuseColor: RGB {channelRed = 0.76, channelGreen = 0.50, channelBlue = 0.98}
-      transform:
-          translation: V3 0 0 -700
-          rotation: Quaternion 0.93 (V3 0.366 0 0)
-          scale: V3 100 100 100
-    - type: mesh
       path: meshes/bunny.ply
       material:
           type: matte
           diffuseColor: RGB {channelRed = 0.57, channelGreen = 0.22, channelBlue = 0.33}
       transform:
-          translation: V3 0 -300 -500
+          translation: V3 0 0 -700
           rotation: Quaternion 1 (V3 0 0 0)
-          scale: V3 400 400 400
+          scale: V3 100 100 100

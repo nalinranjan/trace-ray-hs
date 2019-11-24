@@ -6,7 +6,7 @@ camera:
 viewPlane:
     width: 800
     height: 800
-    dist: 200
+    dist: 500
     maxDepth: 10
 
 bgColor: RGB {channelRed = 0.0, channelGreen = 0.0, channelBlue = 0.0}
@@ -30,33 +30,24 @@ objects:
           type: matte
           diffuseColor: RGB {channelRed = 0.66, channelGreen = 0.46, channelBlue = 0.86}
       transform:
-          translation: V3 200 0 -800
-          rotation: Quaternion 0.93 (V3 0.366 0 0)
-          scale: V3 200 200 200
-    - type: mesh
-      path: meshes/drill.ply
-      material:
-          type: matte
-          diffuseColor: RGB {channelRed = 0.27, channelGreen = 0.22, channelBlue = 0.32}
-      transform:
-          translation: V3 0 0 -200
+          translation: V3 650 200 -2000
           rotation: Quaternion 1 (V3 0 0 0)
-          scale: V3 50 50 50
+          scale: V3 200 200 200
     - type: mesh
       path: meshes/earth.ply
       material:
           type: matte
-          diffuseColor: RGB {channelRed = 1.0, channelGreen = 1.0, channelBlue = 1.0}
+          diffuseColor: RGB {channelRed = 0.023, channelGreen = 0.5, channelBlue = 0.29}
       transform:
-          translation: V3 0 0 -1200
+          translation: V3 -700 200 -2500
           rotation: Quaternion 0.93 (V3 0.366 0 0)
           scale: V3 500 500 500
     - type: mesh
       path: meshes/monkey.ply
       material:
           type: matte
-          diffuseColor: RGB {channelRed = 1.0, channelGreen = 0.0, channelBlue = 0.0}
+          diffuseColor: RGB {channelRed = 0.52, channelGreen = 0.27, channelBlue = 0.15}
       transform:
-          translation: V3 0 0 -700
+          translation: V3 0 -300 -2000
           rotation: Quaternion 0.995 (V3 0 0.098 0)
-          scale: V3 200 200 200
+          scale: V3 300 300 300
