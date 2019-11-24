@@ -14,10 +14,17 @@ import           Data.Colour
 import           Data.Yaml     as Yaml
 import           Linear.Matrix
 import           PLY
+import           System.Environment
 
 main :: IO ()
 main = do
-  result <- Yaml.decodeFileEither "scenes/world.yaml"
+  args <- getArgs
+  let sceneFile = case args of
+                    []    -> "scenes/cube.yaml"
+                    (f:_) -> f
+  -- putStrLn $ show args
+  putStrLn sceneFile
+  result <- Yaml.decodeFileEither sceneFile
   case result of
     Left e -> putStrLn $ show e
     Right (sd :: SceneDesc)
@@ -29,27 +36,12 @@ main = do
     --   putStrLn $ show (sLights sd)
      -> do
       putStrLn "\n"
-      -- putStrLn $ show $ viewMatrix $ sCamera sd
-      -- putStrLn $ show $ projectionMatrix $ sViewPlane sd
       let os = sObjects sd
           view = viewMatrix $ sCamera sd
       ts <- sequence $ map (objectDescToTriangles view) os
       let tris = concat ts
-    --   putStrLn $ show view
-    --   putStrLn $ show os
-    --   putStrLn $ show tris
-    --   putStrLn $ show $
-      -- let worlds = map (worldMatrix . oTransform) os
-      -- putStrLn $ show $ worlds
-      -- putStrLn "\n"
-      -- meshes <- sequence $ map (loadMesh . oPath) os
-      -- let meshesW = zipWith applyTransformMesh worlds meshes
-      -- putStrLn $ show meshes
-      -- putStrLn "\n"
-      -- putStrLn $ show meshesW
       let listRGB = traceRays (sViewPlane sd) (sBgColor sd) tris
       let w = vWidth $ sViewPlane sd
       let h = vHeight $ sViewPlane sd
-      let bs = replicateBS (w * h) $ rgbToByteString $ sBgColor sd
       let bmp = packRGBA32ToBMP24 w h $ listRgbToByteString listRGB
       writeBMP (sOutputFile sd) bmp
