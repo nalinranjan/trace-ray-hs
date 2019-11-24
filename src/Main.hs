@@ -17,7 +17,7 @@ import           PLY
 
 main :: IO ()
 main = do
-  result <- Yaml.decodeFileEither "scenes/cube.yaml"
+  result <- Yaml.decodeFileEither "scenes/world.yaml"
   case result of
     Left e -> putStrLn $ show e
     Right (sd :: SceneDesc)
@@ -38,7 +38,7 @@ main = do
     --   putStrLn $ show view
     --   putStrLn $ show os
     --   putStrLn $ show tris
-    --   putStrLn $ show $ 
+    --   putStrLn $ show $
       -- let worlds = map (worldMatrix . oTransform) os
       -- putStrLn $ show $ worlds
       -- putStrLn "\n"

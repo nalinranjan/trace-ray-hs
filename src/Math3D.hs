@@ -2,13 +2,11 @@ module Math3D where
 
 import           Scene
 
+import           Data.Vector       as Vec
 import           Linear
-import           Linear.V4
 import           Linear.Matrix
 import           Linear.Projection
--- import           Data.Vector.Storable (Vector)
-import           Data.Vector as Vec
-
+import           Linear.V4
 
 data Ray =
   Ray
@@ -33,7 +31,8 @@ projectionMatrix view = perspective 1.57 aspectRatio 10 10000
 
 worldMatrix :: TransformDesc -> M44 Float
 worldMatrix tf = mkTransformation r t !*! scalingMatrix
-  where r = tRotation tf
-        t = tTranslation tf
-        (V3 sx sy sz) = tScale tf
-        scalingMatrix = V4 (V4 sx 0 0 0) (V4 0 sy 0 0) (V4 0 0 sz 0) (V4 0 0 0 1)
+  where
+    r = tRotation tf
+    t = tTranslation tf
+    (V3 sx sy sz) = tScale tf
+    scalingMatrix = V4 (V4 sx 0 0 0) (V4 0 sy 0 0) (V4 0 0 sz 0) (V4 0 0 0 1)
