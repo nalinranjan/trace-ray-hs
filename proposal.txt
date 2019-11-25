@@ -1,0 +1,54 @@
+Project Proposal
+
+Project Name: Trace-ray
+Names: Nalin Ranjan, Maheen Riaz Contractor
+
+Summary
+
+Our aim is to make a multi-threaded raytracer to render arbitrary geometric objects. We will create a scene description represented by spheres and triangular meshes where each object will have certain material properties including reflectivity and translucency associated with it. Our program will parse this scene description and render it to an image using parallel programming.
+
+            __________________________________________________________________
+
+Use Cases
+
+The main interaction a user will have with our program is describing the scene. This will include:
+ 
+- Placement of the camera
+- Placement and color of lights
+- Mesh files, material and transforms of objects
+- Resolution of the output image
+
+After providing these parameters and running the program, the user will receive an output image based on these parameters.
+
+            __________________________________________________________________
+
+Components
+
+Our intended design contains the following modules:
+
+- Scene, this will be used to define data structures to store objects in the scene including lights and a camera.
+- Geometry, this will be the area where all the basic data structures which will cater to the 3 dimensional geometry such as vectors, rays and other primitive objects are defined.
+- Material, this will contain data structures to store material properties and functions to map the textures accordingly.
+- Parser, used to build the scene from the scene description.
+- Intersection, will contain functions which determine if a light ray intersects with the object 
+- Raytracer, this will make use of all the modules to render a final image using parallel programming techniques.
+
+We plan to make use of the following libraries: 
+
+- Codec.BMP, to generate the image from pixels
+- Control.Parallel.Strategies, to perform multi-threading
+- PLY, to aid in parsing mesh files
+- Matrix, to help with object transformation
+
+            __________________________________________________________________
+
+Testing
+
+We will construct unit tests for each of our components. Additionally, we could also find a reference implementation of a raytracer and render our scene with it to compare. 
+
+            __________________________________________________________________
+
+Checkpoint
+
+By the checkpoint, we hope to construct a basic version of our raytracer which can correctly display the placement of objects from the scene without the lighting calculations.
+
