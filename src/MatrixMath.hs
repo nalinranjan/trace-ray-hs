@@ -1,19 +1,12 @@
-module Math3D where
+module MatrixMath where
 
 import           Scene
 
-import           Data.Vector       as Vec
-import           Linear
 import           Linear.Matrix
 import           Linear.Projection
+import           Linear.V3
 import           Linear.V4
 
-data Ray =
-  Ray
-    { rOrigin    :: V3 Float
-    , rDirection :: V3 Float
-    }
-  deriving (Eq, Show)
 
 viewMatrix :: CameraDesc -> M44 Float
 viewMatrix camera = lookAt e l u
@@ -36,3 +29,6 @@ worldMatrix tf = mkTransformation r t !*! scalingMatrix
     t = tTranslation tf
     (V3 sx sy sz) = tScale tf
     scalingMatrix = V4 (V4 sx 0 0 0) (V4 0 sy 0 0) (V4 0 0 sz 0) (V4 0 0 0 1)
+
+applyTransformPoint :: M44 Float -> V3 Float -> V3 Float
+applyTransformPoint matrix = normalizePoint . (matrix !*) . point

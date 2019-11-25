@@ -1,12 +1,12 @@
 module RayTracer where
 
-import           Math3D
-import           Mesh
+import           Objects
 import           Scene
 
 import           Data.Colour.SRGB.Linear
 import           Data.Maybe
 import           Linear.V3
+
 
 radiance :: Ray -> [Triangle] -> RGB Float -> RGB Float
 radiance r tris bg

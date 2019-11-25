@@ -3,7 +3,7 @@
 
 module Main where
 
-import           Math3D
+import           MatrixMath
 import           Mesh
 import           PixelOps
 import           RayTracer
@@ -12,6 +12,7 @@ import           Scene
 import           Codec.BMP
 import           Data.Yaml     as Yaml
 import           System.Environment
+
 
 main :: IO ()
 main = do

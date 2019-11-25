@@ -4,7 +4,7 @@ cabal-version: 1.12
 --
 -- see: https://github.com/sol/hpack
 --
--- hash: b037adcb309c1b630ed1a4bad894396aa768d386118dd736848cc4e4dfe0e283
+-- hash: 999bb3fc10f1a666e43c8b45de70da632f78f5a2ee086a3d7d7e6a0145d0e53c
 
 name:           trace-ray-hs
 version:        0.1.0.0
@@ -28,8 +28,9 @@ source-repository head
 library
   exposed-modules:
       Main
-      Math3D
+      MatrixMath
       Mesh
+      Objects
       PixelOps
       RayTracer
       Scene
@@ -52,8 +53,9 @@ library
 executable trace-ray-hs-exe
   main-is: Main.hs
   other-modules:
-      Math3D
+      MatrixMath
       Mesh
+      Objects
       PixelOps
       RayTracer
       Scene

@@ -1,9 +1,9 @@
 module PixelOps where
 
--- import           Data.Colour
 import           Data.Colour.SRGB.Linear
 import           Data.ByteString as BS
 import           Data.Word
+
 
 floatToWord8 :: Float -> Word8
 floatToWord8 x = fromIntegral (round (x * 255) :: Int) :: Word8

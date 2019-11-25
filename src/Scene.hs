@@ -4,7 +4,6 @@
 
 module Scene where
 
-import           Data.Colour
 import           Data.Colour.SRGB.Linear
 import           Data.Text               as Text
 import           Data.Yaml               as Yaml
