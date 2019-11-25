@@ -116,5 +116,4 @@ objectDescToTriangles view od = do
   mesh <- loadMesh $ oPath od
   let world = worldMatrix $ oTransform od
       meshCam = applyTransformMesh (view !*! world) mesh
-  putStrLn $ show world
   return $ mkTriangles meshCam $ oMaterial od

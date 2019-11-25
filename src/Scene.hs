@@ -33,8 +33,9 @@ data CameraDesc =
 
 instance Yaml.FromJSON CameraDesc where
   parseJSON (Yaml.Object cd) =
-    CameraDesc <$> cd Yaml..: "eyePoint" <*> cd Yaml..: "lookAt" <*>
-    cd Yaml..: "up"
+    CameraDesc <$> cd Yaml..: "eyePoint" 
+               <*> cd Yaml..: "lookAt" 
+               <*> cd Yaml..: "up"
   parseJSON _ = fail "Expected object for CameraDesc"
 
 data ViewPlaneDesc =
@@ -48,9 +49,10 @@ data ViewPlaneDesc =
 
 instance Yaml.FromJSON ViewPlaneDesc where
   parseJSON (Yaml.Object vpd) =
-    ViewPlaneDesc <$> vpd Yaml..: "width" <*> vpd Yaml..: "height" <*>
-    vpd Yaml..: "dist" <*>
-    vpd Yaml..: "maxDepth"
+    ViewPlaneDesc <$> vpd Yaml..: "width" 
+                  <*> vpd Yaml..: "height" 
+                  <*> vpd Yaml..: "dist" 
+                  <*> vpd Yaml..: "maxDepth"
   parseJSON _ = fail "Expected object for ViewPlaneDesc"
 
 data AmbientDesc =
@@ -62,7 +64,8 @@ data AmbientDesc =
 
 instance Yaml.FromJSON AmbientDesc where
   parseJSON (Yaml.Object ad) =
-    AmbientDesc <$> ad Yaml..: "color" <*> ad Yaml..: "strength"
+    AmbientDesc <$> ad Yaml..: "color" 
+                <*> ad Yaml..: "strength"
   parseJSON _ = fail "Expected object for AmbientDesc"
 
 data LightDesc =
@@ -76,9 +79,10 @@ data LightDesc =
 
 instance Yaml.FromJSON LightDesc where
   parseJSON (Yaml.Object ld) =
-    LightDesc <$> ld Yaml..: "type" <*> ld Yaml..: "strength" <*>
-    ld Yaml..: "color" <*>
-    ld Yaml..: "position"
+    LightDesc <$> ld Yaml..: "type" 
+              <*> ld Yaml..: "strength" 
+              <*> ld Yaml..: "color" 
+              <*> ld Yaml..: "position"
   parseJSON _ = fail "Expected object for LightDesc"
 
 instance Ord (RGB Float) where
@@ -93,7 +97,8 @@ data MaterialDesc =
 
 instance Yaml.FromJSON MaterialDesc where
   parseJSON (Yaml.Object md) =
-    MaterialDesc <$> md Yaml..: "type" <*> md Yaml..: "diffuseColor"
+    MaterialDesc <$> md Yaml..: "type" 
+                 <*> md Yaml..: "diffuseColor"
   parseJSON _ = fail "Expected object for MaterialDesc"
 
 data TransformDesc =
@@ -106,8 +111,9 @@ data TransformDesc =
 
 instance Yaml.FromJSON TransformDesc where
   parseJSON (Yaml.Object td) =
-    TransformDesc <$> td Yaml..: "translation" <*> td Yaml..: "rotation" <*>
-    td Yaml..: "scale"
+    TransformDesc <$> td Yaml..: "translation" 
+                  <*> td Yaml..: "rotation" 
+                  <*> td Yaml..: "scale"
   parseJSON _ = fail "Expected object for TransformDesc"
 
 data ObjectDesc =
@@ -121,9 +127,10 @@ data ObjectDesc =
 
 instance Yaml.FromJSON ObjectDesc where
   parseJSON (Yaml.Object od) =
-    ObjectDesc <$> od Yaml..: "type" <*> od Yaml..: "path" <*>
-    od Yaml..: "material" <*>
-    od Yaml..: "transform"
+    ObjectDesc <$> od Yaml..: "type" 
+               <*> od Yaml..: "path" 
+               <*> od Yaml..: "material" 
+               <*> od Yaml..: "transform"
   parseJSON _ = fail "Expected object for ObjectDesc"
 
 data SceneDesc =
@@ -141,11 +148,12 @@ data SceneDesc =
 
 instance Yaml.FromJSON SceneDesc where
   parseJSON (Yaml.Object sd) =
-    SceneDesc <$> sd Yaml..: "camera" <*> sd Yaml..: "viewPlane" <*>
-    sd Yaml..: "bgColor" <*>
-    sd Yaml..: "shadows" <*>
-    sd Yaml..: "outputFile" <*>
-    sd Yaml..: "ambient" <*>
-    sd Yaml..: "lights" <*>
-    sd Yaml..: "objects"
+    SceneDesc <$> sd Yaml..: "camera" 
+              <*> sd Yaml..: "viewPlane" 
+              <*> sd Yaml..: "bgColor" 
+              <*> sd Yaml..: "shadows" 
+              <*> sd Yaml..: "outputFile" 
+              <*> sd Yaml..: "ambient" 
+              <*> sd Yaml..: "lights" 
+              <*> sd Yaml..: "objects"
   parseJSON _ = fail "Expected object for SceneDesc"

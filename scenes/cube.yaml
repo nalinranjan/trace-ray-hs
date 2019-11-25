@@ -4,8 +4,8 @@ camera:
     up: V3 0 1 0
 
 viewPlane:
-    width: 1280
-    height: 720
+    width: 640
+    height: 360
     dist: 200
     maxDepth: 10
 
