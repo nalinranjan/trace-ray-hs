@@ -29,6 +29,7 @@ dependencies:
 - colour >= 2.3.5
 - vector
 - bytestring
+- parallel
 
 library:
   source-dirs: src

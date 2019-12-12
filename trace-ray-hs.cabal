@@ -4,7 +4,7 @@ cabal-version: 1.12
 --
 -- see: https://github.com/sol/hpack
 --
--- hash: 999bb3fc10f1a666e43c8b45de70da632f78f5a2ee086a3d7d7e6a0145d0e53c
+-- hash: cacd873a937a70b79758bfb665058c80b5d684d7df19491a553925319c0d3971
 
 name:           trace-ray-hs
 version:        0.1.0.0
@@ -44,6 +44,7 @@ library
     , bytestring
     , colour >=2.3.5
     , linear >=1.20.9
+    , parallel
     , ply-loader
     , text
     , vector
@@ -69,6 +70,7 @@ executable trace-ray-hs-exe
     , bytestring
     , colour >=2.3.5
     , linear >=1.20.9
+    , parallel
     , ply-loader
     , text
     , trace-ray-hs
@@ -90,6 +92,7 @@ test-suite trace-ray-hs-test
     , bytestring
     , colour >=2.3.5
     , linear >=1.20.9
+    , parallel
     , ply-loader
     , text
     , trace-ray-hs

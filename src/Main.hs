@@ -12,6 +12,7 @@ import           Scene
 import           Codec.BMP
 import           Data.Yaml     as Yaml
 import           System.Environment
+import qualified Data.ByteString as BS
 
 
 main :: IO ()
@@ -30,8 +31,9 @@ main = do
           view = viewMatrix $ sCamera sd
       ts <- sequence $ map (objectDescToTriangles view) os
       let tris    = concat ts
-          listRGB = traceRays (sViewPlane sd) (sBgColor sd) tris
+          listBS  = traceRays (sViewPlane sd) (sBgColor sd) tris
           w       = vWidth $ sViewPlane sd
           h       = vHeight $ sViewPlane sd
-          bmp     = packRGBA32ToBMP24 w h $ listRgbToByteString listRGB
+          -- bmp     = packRGBA32ToBMP24 w h $ listRgbToByteString listRGB
+          bmp     = packRGBA32ToBMP24 w h $ BS.concat $ map BS.concat listBS
       writeBMP (sOutputFile sd) bmp
