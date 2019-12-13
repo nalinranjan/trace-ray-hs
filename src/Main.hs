@@ -29,9 +29,9 @@ main = do
      -> do
       let os   = sObjects sd
           view = viewMatrix $ sCamera sd
-      ts <- sequence $ map (objectDescToTriangles view) os
-      let tris    = concat ts
-          listBS  = traceRays (sViewPlane sd) (sBgColor sd) tris
+      -- ts <- sequence $ map (objectDescToTriangles view) os
+      objs <- objectDescsToObjects view os
+      let listBS  = traceRays (sViewPlane sd) (sBgColor sd) objs
           w       = vWidth $ sViewPlane sd
           h       = vHeight $ sViewPlane sd
           -- bmp     = packRGBA32ToBMP24 w h $ listRgbToByteString listRGB

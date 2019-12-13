@@ -51,3 +51,9 @@ objects:
           translation: V3 0 -300 -2000
           rotation: Quaternion 0.995 (V3 0 0.098 0)
           scale: V3 300 300 300
+    - type: sphere
+      material:
+          type: matte
+          diffuseColor: RGB {channelRed = 0.0, channelGreen = 1.0, channelBlue = 0.0}
+      center: V3 0 -1000 -3000
+      radius: 500

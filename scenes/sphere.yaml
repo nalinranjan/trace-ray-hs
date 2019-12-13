@@ -1,0 +1,32 @@
+camera:
+    eyePoint: V3 0 0 0
+    lookAt: V3 0 0 -1
+    up: V3 0 1 0
+
+viewPlane:
+    width: 640
+    height: 360
+    dist: 200
+    maxDepth: 10
+
+bgColor: RGB {channelRed = 0.26, channelGreen = 0.878, channelBlue = 0.96}
+shadows: true
+outputFile: renders/sphere.bmp
+
+ambient:
+    color: RGB {channelRed = 1.0, channelGreen = 1.0, channelBlue = 1.0}
+    strength: 1
+
+lights:
+    - type: point
+      strength: 1
+      color: RGB {channelRed = 1.0, channelGreen = 1.0, channelBlue = 1.0}
+      position: V3 -10 10 10
+
+objects:
+    - type: sphere
+      material:
+          type: matte
+          diffuseColor: RGB {channelRed = 0.76, channelGreen = 0.56, channelBlue = 0.96}
+      center: V3 0 0 -700
+      radius: 200

@@ -116,20 +116,35 @@ instance Yaml.FromJSON TransformDesc where
   parseJSON _ = fail "Expected object for TransformDesc"
 
 data ObjectDesc =
-  ObjectDesc
-    { oType      :: String
-    , oPath      :: FilePath
-    , oMaterial  :: MaterialDesc
-    , oTransform :: TransformDesc
-    }
+  ODMesh FilePath MaterialDesc TransformDesc |
+  ODSphere MaterialDesc (V3 Float) Float
+  -- ObjectDesc
+  --   { oType      :: String
+  --   , oPath      :: FilePath
+  --   , oMaterial  :: MaterialDesc
+  --   , oTransform :: TransformDesc
+  --   , oCenter    :: V3 Float
+  --   , oRadius    :: Float
+  --   }
   deriving (Eq, Show)
 
 instance Yaml.FromJSON ObjectDesc where
   parseJSON (Yaml.Object od) =
-    ObjectDesc <$> od Yaml..: "type" 
-               <*> od Yaml..: "path" 
-               <*> od Yaml..: "material" 
-               <*> od Yaml..: "transform"
+    -- ObjectDesc <$> od Yaml..: "type" 
+    --            <*> od Yaml..: "path" 
+    --            <*> od Yaml..: "material" 
+    --            <*> od Yaml..: "transform"
+    --            <*> od Yaml..: "center"
+    --            <*> od Yaml..: "radius"
+    do typ <- od Yaml..: "type"
+       case typ :: String of
+         "mesh"   -> ODMesh <$> od Yaml..: "path"
+                            <*> od Yaml..: "material"
+                            <*> od Yaml..: "transform"
+         "sphere" -> ODSphere <$> od Yaml..: "material"
+                              <*> od Yaml..: "center"
+                              <*> od Yaml..: "radius"
+         t        -> fail $ "Unexpected object type: " ++ t
   parseJSON _ = fail "Expected object for ObjectDesc"
 
 data SceneDesc =

@@ -9,6 +9,7 @@ import           Objects
 import           Data.Vector   as Vec
 import           Linear
 import           Linear.Matrix
+import           Linear.Metric
 import           PLY
 import           PLY.Types
 
@@ -35,7 +36,7 @@ plyVertToVertex vert = VertexAttrib vPos vNorm
   where
     vertF = Vec.map scalarToFloat vert
     vPos = V3 (vertF ! 0) (vertF ! 1) (vertF ! 2)
-    vNorm = V3 (vertF ! 3) (vertF ! 4) (vertF ! 5)
+    vNorm = normalize $ V3 (vertF ! 3) (vertF ! 4) (vertF ! 5)
 
 plyFaceToIndex :: Vec.Vector Scalar -> V3 Int
 plyFaceToIndex face = V3 (faceI ! 0) (faceI ! 1) (faceI ! 2)
@@ -65,8 +66,34 @@ mkTriangles (Mesh vs is) mat = aux vs is
       Triangle (verts ! x) (verts ! y) (verts ! z) mat : aux verts is
 
 objectDescToTriangles :: M44 Float -> ObjectDesc -> IO [Triangle]
-objectDescToTriangles view od = do
-  mesh <- loadMesh $ oPath od
-  let world = worldMatrix $ oTransform od
-      meshCam = applyTransformMesh (view !*! world) mesh
-  return $ mkTriangles meshCam $ oMaterial od
+-- objectDescToTriangles view od = do
+  -- do mesh <- loadMesh $ oPath od
+  --    let world = worldMatrix $ oTransform od
+  --        meshCam = applyTransformMesh (view !*! world) mesh
+  --    return $ mkTriangles meshCam $ oMaterial od
+objectDescToTriangles view (ODMesh path mat tform) = 
+  do mesh <- loadMesh $ path
+     let world = worldMatrix $ tform
+         meshCam = applyTransformMesh (view !*! world) mesh
+     return $ mkTriangles meshCam $ mat
+objectDescToTriangles _ _ = error "Invalid Object Description"
+
+
+objectDescToSphere :: M44 Float -> ObjectDesc -> Sphere
+-- objectDescToSphere view od = Sphere c (oRadius od) (oMaterial od)
+--   where c = applyTransformPoint view $ oCenter od
+objectDescToSphere view (ODSphere mat c r) = Sphere cen r mat
+  where cen = applyTransformPoint view $ c
+objectDescToSphere _    _                  = error "Invalid Object Description"
+
+objectDescsToObjects :: M44 Float -> [ObjectDesc] -> IO [Object]
+objectDescsToObjects _    []     = return []
+objectDescsToObjects view (o:os) = 
+  case o of
+    od@(ODMesh _ _ _)   -> do tris <- objectDescToTriangles view od
+                              let triObjs = Prelude.map Object tris
+                              objs <- objectDescsToObjects view os
+                              return $ triObjs Prelude.++ objs
+    od@(ODSphere _ _ _) -> do let sph = Object $ objectDescToSphere view od
+                              objs <- objectDescsToObjects view os
+                              return $ [sph] Prelude.++ objs
