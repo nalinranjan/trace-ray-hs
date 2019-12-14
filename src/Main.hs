@@ -30,13 +30,14 @@ main = do
      -> do
       let os   = sObjects sd
           view = viewMatrix $ sCamera sd
-          eye  = cEyePoint $ sCamera sd
+          -- eye  = cEyePoint $ sCamera sd
       -- ts <- sequence $ map (objectDescToTriangles view) os
       objs <- objectDescsToObjects view os
       print $ sLights sd
       let lights  = map (transformLight view) $ sLights sd
       print $ lights
-      let listBS  = traceRays (sViewPlane sd) (sBgColor sd) objs lights eye 
+      -- let listBS  = traceRays (sViewPlane sd) (sBgColor sd) objs lights eye 
+      let listBS  = traceRays sd objs lights 
           w       = vWidth $ sViewPlane sd
           h       = vHeight $ sViewPlane sd
           -- bmp     = packRGBA32ToBMP24 w h $ listRgbToByteString listRGB

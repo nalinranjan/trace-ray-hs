@@ -13,9 +13,10 @@ bgColor: RGB {channelRed = 0.0, channelGreen = 0.0, channelBlue = 0.0}
 shadows: true
 outputFile: renders/world.bmp
 
-ambient:
-    color: RGB {channelRed = 1.0, channelGreen = 1.0, channelBlue = 1.0}
-    strength: 1
+ambient: RGB {channelRed = 0.1, channelGreen = 0.1, channelBlue = 0.1}
+# ambient:
+#     color: RGB {channelRed = 1.0, channelGreen = 1.0, channelBlue = 1.0}
+#     strength: 1
 
 lights:
     - type: point

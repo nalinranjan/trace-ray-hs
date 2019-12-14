@@ -54,18 +54,18 @@ instance Yaml.FromJSON ViewPlaneDesc where
                   <*> vpd Yaml..: "maxDepth"
   parseJSON _ = fail "Expected object for ViewPlaneDesc"
 
-data AmbientDesc =
-  AmbientDesc
-    { aColor    :: RGB Float
-    , aStrength :: Float
-    }
-  deriving (Eq, Show)
+-- data AmbientDesc =
+--   AmbientDesc
+--     { aColor    :: RGB Float
+--     , aStrength :: Float
+--     }
+--   deriving (Eq, Show)
 
-instance Yaml.FromJSON AmbientDesc where
-  parseJSON (Yaml.Object ad) =
-    AmbientDesc <$> ad Yaml..: "color" 
-                <*> ad Yaml..: "strength"
-  parseJSON _ = fail "Expected object for AmbientDesc"
+-- instance Yaml.FromJSON AmbientDesc where
+--   parseJSON (Yaml.Object ad) =
+--     AmbientDesc <$> ad Yaml..: "color" 
+--                 <*> ad Yaml..: "strength"
+--   parseJSON _ = fail "Expected object for AmbientDesc"
 
 data LightDesc =
   LightDesc
@@ -158,7 +158,8 @@ data SceneDesc =
     , sBgColor    :: RGB Float
     , sShadows    :: Bool
     , sOutputFile :: FilePath
-    , sAmbient    :: AmbientDesc
+    -- , sAmbient    :: AmbientDesc
+    , sAmbient    :: RGB Float
     , sLights     :: [LightDesc]
     , sObjects    :: [ObjectDesc]
     }

@@ -12,7 +12,7 @@ import           Data.Maybe
 import           Linear.V3
 import           Linear.Metric as LM
 import           Control.Parallel.Strategies
-import           Data.ByteString
+import qualified Data.ByteString as BS
 
 
 data Intersection =
@@ -25,10 +25,10 @@ data Intersection =
   deriving (Eq, Show)
 
 
-radiance :: Ray -> [Object] -> [LightDesc] -> ByteString -> V3 Float -> ByteString
-radiance r objs ls bg eye
+radiance :: Ray -> [Object] -> [LightDesc] -> BS.ByteString -> V3 Float -> RGB Float -> BS.ByteString
+radiance r objs ls bg eye amb
   | Prelude.null ds = bg
-  | otherwise       = rgbToByteString $ clampRGB $ Prelude.foldr (!+!) (RGB 0 0 0) colors
+  | otherwise       = rgbToByteString $ clampRGB $ totalRad
   where
     ds       = mapMaybe (intersect r) objs
     (t, obj) = Prelude.minimum ds
@@ -36,9 +36,12 @@ radiance r objs ls bg eye
     intPt    = (rOrigin r) + (toV3 t) * (rDirection r)
     n        = normal intPt obj
     v        = normalize $ eye - intPt
-    lrs      = Prelude.map f ls
-    colors   = [phong mat (Intersection n v l r) lt | (lt, l, r) <- lrs]
-    f lt     = (lt, l, r)
+    lrs      = mapMaybe calcIntersection ls
+    rads     = [phong mat (Intersection n v l r) lt | (lt, l, r) <- lrs]
+    totalRad = amb !+! Prelude.foldr (!+!) (RGB 0 0 0) rads
+    calcIntersection lt = if inShadow intPt objs lt
+                          then Nothing
+                          else Just (lt, l, r)
       where (l,r) = getLightV3 intPt n lt
 
 getLightV3 :: V3 Float -> V3 Float -> LightDesc -> (V3 Float, V3 Float)
@@ -46,6 +49,9 @@ getLightV3 int n lt = (l, r)
   where l = normalize $ (lPosition lt) - int
         r = reflect (-l) n
 
+inShadow :: V3 Float -> [Object] -> LightDesc -> Bool
+inShadow pt objs lt = any isJust $ fmap (intersect r) objs
+  where r = Ray pt $ normalize $ lPosition lt - pt
 
 mkRay :: Int -> Int -> Float -> Int -> Int -> Ray
 mkRay w h d i j = Ray (V3 0 0 0) (normalize (V3 x y z))
@@ -54,13 +60,19 @@ mkRay w h d i j = Ray (V3 0 0 0) (normalize (V3 x y z))
     y = (fromIntegral $ - (h `div` 2) + j :: Float) + 0.5
     z = - d
 
-traceRays :: ViewPlaneDesc -> RGB Float -> [Object] -> [LightDesc] -> V3 Float -> [[ByteString]]
-traceRays (ViewPlaneDesc w h d _) bg objs ls eye =
-  [ [radiance (mkRay' i j) objs ls bg' eye | i <- [0 .. (w - 1)] ] | j <- [0 .. (h - 1)] ] 
+-- traceRays :: ViewPlaneDesc -> RGB Float -> [Object] -> [LightDesc] -> V3 Float -> [[ByteString]]
+traceRays :: SceneDesc -> [Object] -> [LightDesc] -> [[BS.ByteString]]
+-- traceRays (ViewPlaneDesc w h d _) bg objs ls eye =
+traceRays sd objs ls =
+  [ [radiance (mkRay' i j) objs ls bg' eye amb | i <- [0 .. (w - 1)] ] | j <- [0 .. (h - 1)] ] 
     `using` parList rdeepseq
   where
-    mkRay' = mkRay w h d
-    bg'    = rgbToByteString bg
+    (ViewPlaneDesc w h d _) = sViewPlane sd
+    bg'                     = rgbToByteString $ sBgColor sd
+    eye                     = cEyePoint $ sCamera sd
+    mkRay'                  = mkRay w h d
+    amb                     = sAmbient sd
+    -- bg'                     = rgbToByteString bg
 
 phong :: MaterialDesc -> Intersection -> LightDesc -> RGB Float
 phong mat int l = clampRGB $ scaleRGB (diffuse + specular) color
