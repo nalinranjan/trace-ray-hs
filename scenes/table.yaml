@@ -61,9 +61,20 @@ objects:
           kt: 0
           alpha: 20
       transform:
-          translation: V3 0 200 -1800
+          translation: V3 0 400 -1800
           rotation: Quaternion 0.995 (V3 0 0.098 0)
           scale: V3 100 100 100
+    - type: mesh
+      path: meshes/dragon.ply
+      material:
+          diffuseColor: RGB {channelRed = 1.0, channelGreen = 0.843, channelBlue = 0.0}
+          kr: 0
+          kt: 0
+          alpha: 20
+      transform:
+          translation: V3 -100 100 -1600
+          rotation: Quaternion 1 (V3 0 0 0)
+          scale: V3 1500 1500 1500
     # - type: sphere
     #   material:
     #       type: matte
