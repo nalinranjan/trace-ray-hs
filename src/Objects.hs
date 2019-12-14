@@ -67,7 +67,7 @@ data Triangle =
 instance SceneObject Triangle where
   intersect (Ray o d) tri@(Triangle v0 v1 v2 _ _)
     | pDote1 == 0 = Nothing
-    | t < 0 = Nothing
+    | t < 0.1 = Nothing
     | u < 0 || v < 0 || u + v > 1 = Nothing
     | otherwise = Just (t, Object tri)
     where
@@ -98,7 +98,7 @@ data Sphere =
 instance SceneObject Sphere where
   intersect (Ray o d) sph@(Sphere c r _) 
     | dInt < 0  = Nothing
-    | w1 > 0.01 = Just (w1, Object sph)
+    | w1 > 0.1 = Just (w1, Object sph)
     | otherwise = Just (w2, Object sph)
     where 
       cToO  = o - c 
