@@ -63,7 +63,11 @@ mkTriangles (Mesh vs is) mat = aux vs is
     aux :: Vec.Vector VertexAttrib -> [V3 Int] -> [Triangle]
     aux verts [] = []
     aux verts ((V3 x y z):is) =
-      Triangle (verts ! x) (verts ! y) (verts ! z) mat : aux verts is
+      Triangle v0 v1 v2 mat n : aux verts is
+      where v0 = verts ! x
+            v1 = verts ! y
+            v2 = verts ! z
+            n  = normalize $ ((vNormal v0) + (vNormal v1) + (vNormal v2)) / 3
 
 objectDescToTriangles :: M44 Float -> ObjectDesc -> IO [Triangle]
 -- objectDescToTriangles view od = do

@@ -1,3 +1,5 @@
+{-# LANGUAGE FlexibleContexts   #-}
+
 module MatrixMath where
 
 import           Scene
@@ -6,6 +8,7 @@ import           Linear.Matrix
 import           Linear.Projection
 import           Linear.V3
 import           Linear.V4
+import           Linear.Metric
 
 
 viewMatrix :: CameraDesc -> M44 Float
@@ -32,3 +35,11 @@ worldMatrix tf = mkTransformation r t !*! scalingMatrix
 
 applyTransformPoint :: M44 Float -> V3 Float -> V3 Float
 applyTransformPoint matrix = normalizePoint . (matrix !*) . point
+
+reflect :: V3 Float -> V3 Float -> V3 Float
+reflect v n = v - n * vec
+  where vDotN = dot v n
+        vec   = toV3 $ 2 * vDotN
+
+toV3 :: Float -> V3 Float
+toV3 x = V3 x x x

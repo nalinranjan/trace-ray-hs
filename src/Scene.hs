@@ -89,15 +89,19 @@ instance Ord (RGB Float) where
 
 data MaterialDesc =
   MaterialDesc
-    { mType         :: String
-    , mDiffuseColor :: RGB Float
+    { mDiffuseColor :: RGB Float
+    , mKr           :: Float
+    , mKt           :: Float
+    , mAlpha        :: Float
     }
   deriving (Eq, Show, Ord)
 
 instance Yaml.FromJSON MaterialDesc where
   parseJSON (Yaml.Object md) =
-    MaterialDesc <$> md Yaml..: "type" 
-                 <*> md Yaml..: "diffuseColor"
+    MaterialDesc <$> md Yaml..: "diffuseColor" 
+                 <*> md Yaml..: "kr"
+                 <*> md Yaml..: "kt"
+                 <*> md Yaml..: "alpha"
   parseJSON _ = fail "Expected object for MaterialDesc"
 
 data TransformDesc =

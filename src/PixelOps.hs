@@ -16,3 +16,19 @@ replicateBS n bs = BS.concat $ Prelude.replicate n bs
 
 listRgbToByteString :: [RGB Float] -> ByteString
 listRgbToByteString rgbList = BS.concat $ Prelude.map rgbToByteString rgbList
+
+clamp :: (Ord a) => a -> a -> a -> a
+clamp low high = max low . min high
+
+clampRGB :: RGB Float -> RGB Float
+clampRGB (RGB r g b) = RGB (clamp' r) (clamp' g) (clamp' b)
+  where clamp' = clamp 0.0 1.0
+
+multRGB :: RGB Float -> RGB Float -> RGB Float
+multRGB (RGB r g b) (RGB r' g' b') = RGB (r * r') (g * g') (b * b')
+
+scaleRGB :: Float -> RGB Float -> RGB Float
+scaleRGB x = multRGB (RGB x x x)
+
+(!+!) :: RGB Float -> RGB Float -> RGB Float
+(RGB r g b) !+! (RGB r' g' b') = RGB (r + r') (g + g') (b + b')

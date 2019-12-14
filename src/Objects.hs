@@ -3,9 +3,12 @@
 module Objects where
 
 import           Scene
+import           MatrixMath
 
 import           Linear.V3
 import           Linear
+import           Linear.Matrix
+import           Linear.Metric
 
 
 data Ray =
@@ -19,6 +22,7 @@ data Ray =
 class SceneObject a where
   intersect :: Ray -> a -> Maybe (Float, Object)
   material :: a -> MaterialDesc
+  normal :: V3 Float -> a -> V3 Float
 
 data Object where
   Object :: (SceneObject a, Ord a) => a -> Object
@@ -33,7 +37,8 @@ instance Ord Object where
 
 instance SceneObject Object where
   intersect r (Object o) = intersect r o
-  material  (Object o) = material o
+  material    (Object o) = material o
+  normal    i (Object o) = normal i o
 
 
 -- instance SceneObject a => SceneObject (Object a) where
@@ -51,15 +56,16 @@ data VertexAttrib =
 
 data Triangle =
   Triangle
-    { tV0  :: VertexAttrib
-    , tV1  :: VertexAttrib
-    , tV2  :: VertexAttrib
-    , tMat :: MaterialDesc
+    { tV0     :: VertexAttrib
+    , tV1     :: VertexAttrib
+    , tV2     :: VertexAttrib
+    , tMat    :: MaterialDesc
+    , tNormal :: V3 Float
     }
   deriving (Eq, Show, Ord)
 
 instance SceneObject Triangle where
-  intersect (Ray o d) tri@(Triangle v0 v1 v2 _)
+  intersect (Ray o d) tri@(Triangle v0 v1 v2 _ _)
     | pDote1 == 0 = Nothing
     | t < 0 = Nothing
     | u < 0 || v < 0 || u + v > 1 = Nothing
@@ -77,8 +83,9 @@ instance SceneObject Triangle where
       t = dot q e2 / pDote1
       u = dot p vT / pDote1
       v = dot q d / pDote1
-  material = tMat
 
+  material = tMat
+  normal _ = tNormal
 
 data Sphere =
   Sphere
@@ -101,11 +108,10 @@ instance SceneObject Sphere where
       sqrtD = sqrt dInt
       w1    = (-bInt - sqrtD) / 2.0
       w2    = (-bInt + sqrtD) / 2.0
+
   material = sMat
+  normal pt (Sphere c _ _) = normalize $ pt - c
 
 
--- getMaterial :: Object a -> MaterialDesc
--- -- getMaterial (Object o) = eval o
--- --   where eval (Triangle _ _ _ m) = m
--- getMaterial (OTriangle tri) = tMat tri
--- getMaterial (OSphere sph)   = sMat sph
+transformLight :: M44 Float -> LightDesc -> LightDesc
+transformLight m (LightDesc t s c p) = LightDesc t s c $ applyTransformPoint m p

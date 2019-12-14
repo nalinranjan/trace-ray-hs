@@ -1,0 +1,81 @@
+camera:
+    eyePoint: V3 0 600 0
+    lookAt: V3 0 0 -2000
+    up: V3 0 1 0
+
+viewPlane:
+    width: 600
+    height: 400
+    dist: 500
+    maxDepth: 10
+
+bgColor: RGB {channelRed = 0.0, channelGreen = 0.0, channelBlue = 0.0}
+shadows: true
+outputFile: renders/world.bmp
+
+ambient:
+    color: RGB {channelRed = 1.0, channelGreen = 1.0, channelBlue = 1.0}
+    strength: 1
+
+lights:
+    - type: point
+      strength: 1
+      color: RGB {channelRed = 1.0, channelGreen = 1.0, channelBlue = 1.0}
+      position: V3 -500 1000 -10
+
+objects:
+    - type: mesh
+      path: meshes/table.ply
+      material:
+          diffuseColor: RGB {channelRed = 0.961, channelGreen = 0.851, channelBlue = 0.651}
+          kr: 0
+          kt: 0
+          alpha: 20
+      transform:
+          translation: V3 0 -1300 -2000
+          rotation: Quaternion 1 (V3 0 0 0)
+          scale: V3 350 350 350
+    # - type: mesh
+    #   path: meshes/cube.ply
+    #   material:
+    #       type: matte
+    #       diffuseColor: RGB {channelRed = 0.66, channelGreen = 0.46, channelBlue = 0.86}
+    #   transform:
+    #       translation: V3 650 200 -2000
+    #       rotation: Quaternion 1 (V3 0 0 0)
+    #       scale: V3 200 200 200
+    # - type: mesh
+    #   path: meshes/earth.ply
+    #   material:
+    #       type: matte
+    #       diffuseColor: RGB {channelRed = 0.023, channelGreen = 0.5, channelBlue = 0.29}
+    #   transform:
+    #       translation: V3 -700 200 -2500
+    #       rotation: Quaternion 0.93 (V3 0.366 0 0)
+    #       scale: V3 500 500 500
+    - type: mesh
+      path: meshes/monkey.ply
+      material:
+          diffuseColor: RGB {channelRed = 0.52, channelGreen = 0.27, channelBlue = 0.15}
+          kr: 0
+          kt: 0
+          alpha: 20
+      transform:
+          translation: V3 0 200 -1800
+          rotation: Quaternion 0.995 (V3 0 0.098 0)
+          scale: V3 100 100 100
+    # - type: sphere
+    #   material:
+    #       type: matte
+    #       diffuseColor: RGB {channelRed = 0.0, channelGreen = 1.0, channelBlue = 0.0}
+    #   center: V3 0 -1000 -3000
+    #   radius: 500
+    # - type: mesh
+    #   path: meshes/dragon.ply
+    #   material:
+    #       type: matte
+    #       diffuseColor: RGB {channelRed = 1.0, channelGreen = 0.843, channelBlue = 0.0}
+    #   transform:
+    #       translation: V3 0 600 -2000
+    #       rotation: Quaternion 1 (V3 0 0 0)
+    #       scale: V3 300 300 300
