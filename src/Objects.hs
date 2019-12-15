@@ -3,12 +3,9 @@
 module Objects where
 
 import           Scene
-import           MatrixMath
 
 import           Linear.V3
 import           Linear
--- import           Linear.Matrix
--- import           Linear.Metric
 
 
 data Ray =
@@ -20,7 +17,6 @@ data Ray =
   deriving (Eq, Show)
 
 epsilon :: Float
--- epsilon = 0.15
 epsilon = 0.1
 
 class SceneObject a where
@@ -28,10 +24,9 @@ class SceneObject a where
   material :: a -> MaterialDesc
   normal :: V3 Float -> a -> V3 Float
 
+
 data Object where
   Object :: (SceneObject a, Ord a, Show a) => a -> Object
-  -- OTriangle :: Triangle -> Object Triangle
-  -- OSphere   :: Sphere   -> Object Sphere
 
 instance Show Object where
   show (Object o) = show o
@@ -48,18 +43,12 @@ instance SceneObject Object where
   normal    i (Object o) = normal i o
 
 
--- instance SceneObject a => SceneObject (Object a) where
---   intersect ray (OTriangle t) = intersect ray t
---   intersect ray (OSphere   s) = intersect ray s
-
-
 data VertexAttrib =
   VertexAttrib
     { vPosition :: V3 Float
     , vNormal   :: V3 Float
     }
   deriving (Eq, Show, Ord)
-
 
 data Triangle =
   Triangle
@@ -94,6 +83,7 @@ instance SceneObject Triangle where
   material = tMat
   normal _ = tNormal
 
+
 data Sphere =
   Sphere
     { sCenter :: V3 Float
@@ -119,7 +109,3 @@ instance SceneObject Sphere where
 
   material = sMat
   normal pt (Sphere c _ _) = normalize $ pt - c
-
-
-transformLight :: M44 Float -> LightDesc -> LightDesc
-transformLight m (LightDesc t s c p) = LightDesc t s c $ applyTransformPoint m p
