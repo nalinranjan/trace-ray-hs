@@ -41,5 +41,17 @@ reflect v n = normalize $ v - n * vec
   where vDotN = dot v n
         vec   = toV3 $ 2 * vDotN
 
+transmit :: V3 Float -> V3 Float -> Float -> Float -> (V3 Float, Bool)
+transmit v n u1 u2 
+  | u1 == u2  = (v, False)
+  | tir > 1   = (reflect v (-n'), True)
+  | otherwise = (normalize (a + b), False)
+  where n'      = if dot v n > 0 then n else -n
+        u1Divu2 = u1 / u2
+        vDotN   = dot v n'
+        tir     = u1Divu2 * u1Divu2 * (1 - vDotN * vDotN)
+        a       = toV3 u1Divu2 * (v - toV3 vDotN * n')
+        b       = toV3 (sqrt (1 - tir)) * n'
+
 toV3 :: Float -> V3 Float
 toV3 x = V3 x x x

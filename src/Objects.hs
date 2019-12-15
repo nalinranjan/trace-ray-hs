@@ -15,6 +15,7 @@ data Ray =
   Ray
     { rOrigin    :: V3 Float
     , rDirection :: V3 Float
+    , rIoR       :: Float
     }
   deriving (Eq, Show)
 
@@ -71,7 +72,7 @@ data Triangle =
   deriving (Eq, Show, Ord)
 
 instance SceneObject Triangle where
-  intersect (Ray o d) tri@(Triangle v0 v1 v2 _ _)
+  intersect (Ray o d _) tri@(Triangle v0 v1 v2 _ _)
     | pDote1 == 0                 = Nothing
     | t < epsilon                 = Nothing
     | u < 0 || v < 0 || u + v > 1 = Nothing
@@ -102,7 +103,7 @@ data Sphere =
   deriving (Eq, Show, Ord)
 
 instance SceneObject Sphere where
-  intersect (Ray o d) sph@(Sphere c r _) 
+  intersect (Ray o d _) sph@(Sphere c r _) 
     | dInt < 0     = Nothing
     | w1 > epsilon = Just (w1, Object sph)
     | w2 > epsilon = Just (w2, Object sph)

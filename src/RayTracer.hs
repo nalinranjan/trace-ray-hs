@@ -27,24 +27,32 @@ radiance :: Int -> Ray -> [Object] -> [LightDesc] -> RGB Float -> V3 Float -> RG
 radiance depth ray objs ls bg eye amb
   | Prelude.null ds = bg
   | otherwise       = let c = totalRad
-                          ref = if depth > 0 && kr > 0.0
-                                   then scaleRGB kr $ radiance (pred depth) refRay objs ls bg eye amb
-                                   else RGB 0 0 0
-                      in c !+! ref
+                          ref = if depth > 0 && kr > 0
+                                then scaleRGB kr $ radiance (pred depth) refRay objs ls bg eye amb
+                                else RGB 0 0 0
+                          trans = if depth > 0 && kt > 0
+                                  then scaleRGB kt $ radiance (pred depth) transRay objs ls bg eye amb
+                                  else RGB 0 0 0
+                      in c !+! ref !+! trans
                       -- in c
   where
-    ds       = mapMaybe (intersect ray) objs
-    (t, obj) = Prelude.minimum ds
-    mat      = material obj
-    kr       = mKr mat
-    kt       = mKt mat
-    intPt    = (rOrigin ray) + (toV3 t) * (rDirection ray)
-    n        = normal intPt obj
-    v        = normalize $ eye - intPt
-    lrs      = mapMaybe calcIntersection ls
-    rads     = [phong mat (Intersection n v l r) lt | (lt, l, r) <- lrs]
-    refRay   = Ray intPt $ reflect (rDirection ray) n
-    totalRad = amb !+! Prelude.foldr (!+!) (RGB 0 0 0) rads
+    ds          = mapMaybe (intersect ray) objs
+    (t, obj)    = Prelude.minimum ds
+    mat         = material obj
+    kr          = mKr mat
+    kt          = mKt mat
+    u1          = rIoR ray
+    objIoR      = mIoR mat
+    u2          = if u1 == objIoR then 1 else objIoR
+    intPt       = (rOrigin ray) + (toV3 t) * (rDirection ray)
+    n           = normal intPt obj
+    v           = normalize $ eye - intPt
+    lrs         = mapMaybe calcIntersection ls
+    rads        = [phong mat (Intersection n v l r) lt | (lt, l, r) <- lrs]
+    totalRad    = amb !+! Prelude.foldr (!+!) (RGB 0 0 0) rads
+    refRay      = Ray intPt (reflect (rDirection ray) n) u1
+    (tDir, tir) = transmit (rDirection ray) n u1 u2
+    transRay    = Ray intPt tDir $ if tir then u1 else u2
     calcIntersection lt = if inShadow intPt objs lt
                           then Nothing
                           else Just (lt, l, r)
@@ -57,10 +65,10 @@ getLightV3 int n lt = (l, r)
 
 inShadow :: V3 Float -> [Object] -> LightDesc -> Bool
 inShadow pt objs lt = any isJust $ fmap (intersect r) objs
-  where r = Ray pt $ normalize $ lPosition lt - pt
+  where r = Ray pt (normalize (lPosition lt - pt)) 1
 
 mkRay :: Int -> Int -> Float -> Int -> Int -> Ray
-mkRay w h d i j = Ray (V3 0 0 0) (normalize (V3 x y z))
+mkRay w h d i j = Ray (V3 0 0 0) (normalize (V3 x y z)) 1
   where
     x = (fromIntegral $ - (w `div` 2) + i :: Float) + 0.5
     y = (fromIntegral $ - (h `div` 2) + j :: Float) + 0.5

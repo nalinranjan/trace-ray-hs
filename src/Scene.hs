@@ -8,7 +8,7 @@ import           Data.Colour.SRGB.Linear
 import           Data.Text               as Text
 import           Data.Yaml               as Yaml
 import           Linear
-import           Linear.Quaternion
+-- import           Linear.Quaternion
 
 instance Yaml.FromJSON (V3 Float) where
   parseJSON (Yaml.String s) = return (read (Text.unpack s))
@@ -93,6 +93,7 @@ data MaterialDesc =
     , mKr           :: Float
     , mKt           :: Float
     , mAlpha        :: Float
+    , mIoR          :: Float
     }
   deriving (Eq, Show, Ord)
 
@@ -102,6 +103,7 @@ instance Yaml.FromJSON MaterialDesc where
                  <*> md Yaml..: "kr"
                  <*> md Yaml..: "kt"
                  <*> md Yaml..: "alpha"
+                 <*> md Yaml..: "ior"
   parseJSON _ = fail "Expected object for MaterialDesc"
 
 data TransformDesc =

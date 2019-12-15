@@ -4,9 +4,9 @@ camera:
     up: V3 0 1 0
 
 viewPlane:
-    width: 800
-    height: 800
-    dist: 500
+    width: 1200
+    height: 1200
+    dist: 1000
     maxDepth: 5
 
 bgColor: RGB {channelRed = 0.392, channelGreen = 0.584, channelBlue = 0.929}
@@ -21,7 +21,6 @@ ambient: RGB {channelRed = 0.1, channelGreen = 0.1, channelBlue = 0.1}
 lights:
     - type: point
       strength: 1
-    #   color: RGB {channelRed = 1.0, channelGreen = 1.0, channelBlue = 1.0}
       color: RGB {channelRed = 0.8, channelGreen = 0.8, channelBlue = 0.8}
       position: V3 600 800 -800
     - type: point
@@ -38,6 +37,7 @@ objects:
           kr: 0
           kt: 0
           alpha: 200
+          ior : 1
       transform:
           translation: V3 0 -1300 -2000
           rotation: Quaternion 1 (V3 0 0 0)
@@ -46,13 +46,14 @@ objects:
       path: meshes/cube.ply
       material:
           diffuseColor: RGB {channelRed = 0.0, channelGreen = 0.0, channelBlue = 0.0}
-          kr: 0.8
-          kt: 0
+          kr: 0
+          kt: 0.8
           alpha: 200
+          ior: 1.5
       transform:
-          translation: V3 0 100 -2800
+          translation: V3 0 100 -1500
           rotation: Quaternion 1 (V3 0 0 0)
-          scale: V3 200 200 200
+          scale: V3 75 75 75
     # - type: mesh
     #   path: meshes/earth.ply
     #   material:
@@ -71,16 +72,18 @@ objects:
           kr: 0
           kt: 0
           alpha: 20
+          ior: 1
       transform:
           translation: V3 -100 200 -1800
           rotation: Quaternion 0.995 (V3 0 0.098 0)
           scale: V3 100 100 100
     - type: sphere
       material:
-          diffuseColor: RGB {channelRed = 1.0, channelGreen = 0.0, channelBlue = 0.0}
-          kr: 0
+          diffuseColor: RGB {channelRed = 0.0, channelGreen = 0.0, channelBlue = 0.0}
+          kr: 0.8
           kt: 0
           alpha: 200
+          ior: 1
       center: V3 220 220 -1800
       radius: 100
     # - type: mesh
