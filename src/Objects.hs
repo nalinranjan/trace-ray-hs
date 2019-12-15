@@ -38,7 +38,7 @@ instance Ord Object where
   (Object _) <= (Object _) = True
 
 instance SceneObject Object where
-  intersect r (Object o) = intersect r o
+  intersect r (Object o) = r `intersect` o
   material    (Object o) = material o
   normal    i (Object o) = normal i o
 

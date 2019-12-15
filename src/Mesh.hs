@@ -88,10 +88,10 @@ objectDescsToObjects :: M44 Float -> [ObjectDesc] -> IO [Object]
 objectDescsToObjects _    []     = return []
 objectDescsToObjects view (o:os) = 
   case o of
-    od@(ODMesh _ _ _)   -> do tris <- objectDescToTriangles view od
-                              let triObjs = Prelude.map Object tris
-                              objs <- objectDescsToObjects view os
-                              return $ triObjs Prelude.++ objs
-    od@(ODSphere _ _ _) -> do let sph = Object $ objectDescToSphere view od
-                              objs <- objectDescsToObjects view os
-                              return $ [sph] Prelude.++ objs
+    od@ODMesh{}   -> do tris <- objectDescToTriangles view od
+                        let triObjs = Prelude.map Object tris
+                        objs <- objectDescsToObjects view os
+                        return $ triObjs Prelude.++ objs
+    od@ODSphere{} -> do let sph = Object $ objectDescToSphere view od
+                        objs <- objectDescsToObjects view os
+                        return $ [sph] Prelude.++ objs

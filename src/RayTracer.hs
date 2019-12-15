@@ -42,7 +42,7 @@ radiance depth ray objs ls bg eye amb
     u1          = rIoR ray
     objIoR      = mIoR mat
     u2          = if u1 == objIoR then 1 else objIoR
-    intPt       = (rOrigin ray) + (toV3 t) * (rDirection ray)
+    intPt       = rOrigin ray + toV3 t * rDirection ray
     n           = normal intPt obj
     v           = normalize $ eye - intPt
     lrs         = mapMaybe calcIntersection ls
@@ -94,7 +94,7 @@ phong mat int l = scaleRGB (diffuse + specular) color
         rDotV     = LM.dot (iRefl int) (iView int)
         color     = multRGB light diffColor
         diffuse   = lDotN
-        specular  = rDotV ** (mAlpha mat)
+        specular  = rDotV ** mAlpha mat
 
 
 reflect :: V3 Float -> V3 Float -> V3 Float
