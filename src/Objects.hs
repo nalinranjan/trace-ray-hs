@@ -25,9 +25,12 @@ class SceneObject a where
   normal :: V3 Float -> a -> V3 Float
 
 data Object where
-  Object :: (SceneObject a, Ord a) => a -> Object
+  Object :: (SceneObject a, Ord a, Show a) => a -> Object
   -- OTriangle :: Triangle -> Object Triangle
   -- OSphere   :: Sphere   -> Object Sphere
+
+instance Show Object where
+  show (Object o) = show o
 
 instance Eq Object where
   (Object o1) == (Object o2) = False
