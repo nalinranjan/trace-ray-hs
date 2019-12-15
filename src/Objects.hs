@@ -7,8 +7,8 @@ import           MatrixMath
 
 import           Linear.V3
 import           Linear
-import           Linear.Matrix
-import           Linear.Metric
+-- import           Linear.Matrix
+-- import           Linear.Metric
 
 
 data Ray =
@@ -18,6 +18,9 @@ data Ray =
     }
   deriving (Eq, Show)
 
+epsilon :: Float
+-- epsilon = 0.15
+epsilon = 0.1
 
 class SceneObject a where
   intersect :: Ray -> a -> Maybe (Float, Object)
@@ -33,10 +36,10 @@ instance Show Object where
   show (Object o) = show o
 
 instance Eq Object where
-  (Object o1) == (Object o2) = False
+  (Object _) == (Object _) = False
 
 instance Ord Object where
-  (Object o1) <= (Object o2) = True
+  (Object _) <= (Object _) = True
 
 instance SceneObject Object where
   intersect r (Object o) = intersect r o
@@ -69,10 +72,10 @@ data Triangle =
 
 instance SceneObject Triangle where
   intersect (Ray o d) tri@(Triangle v0 v1 v2 _ _)
-    | pDote1 == 0 = Nothing
-    | t < 0.1 = Nothing
+    | pDote1 == 0                 = Nothing
+    | t < epsilon                 = Nothing
     | u < 0 || v < 0 || u + v > 1 = Nothing
-    | otherwise = Just (t, Object tri)
+    | otherwise                   = Just (t, Object tri)
     where
       v0pos = vPosition v0
       v1pos = vPosition v1
@@ -97,12 +100,13 @@ data Sphere =
     , sMat    :: MaterialDesc
     }
   deriving (Eq, Show, Ord)
-      
+
 instance SceneObject Sphere where
   intersect (Ray o d) sph@(Sphere c r _) 
-    | dInt < 0  = Nothing
-    | w1 > 0.1 = Just (w1, Object sph)
-    | otherwise = Just (w2, Object sph)
+    | dInt < 0     = Nothing
+    | w1 > epsilon = Just (w1, Object sph)
+    | w2 > epsilon = Just (w2, Object sph)
+    | otherwise    = Nothing
     where 
       cToO  = o - c 
       bInt  = dot d cToO * 2

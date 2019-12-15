@@ -5,7 +5,7 @@ module Main where
 
 import           MatrixMath
 import           Mesh
-import           PixelOps
+-- import           PixelOps
 import           RayTracer
 import           Scene
 import           Objects
@@ -25,7 +25,7 @@ main = do
   putStrLn ("Using scene file: " ++ sceneFile)
   result <- Yaml.decodeFileEither sceneFile
   case result of
-    Left e -> putStrLn $ show e
+    Left e -> print e
     Right (sd :: SceneDesc)
      -> do
       let os   = sObjects sd
@@ -33,9 +33,9 @@ main = do
           -- eye  = cEyePoint $ sCamera sd
       -- ts <- sequence $ map (objectDescToTriangles view) os
       objs <- objectDescsToObjects view os
-      print $ sLights sd
+      -- print $ sLights sd
       let lights  = map (transformLight view) $ sLights sd
-      print $ lights
+      -- print lights
       -- let listBS  = traceRays (sViewPlane sd) (sBgColor sd) objs lights eye 
       let listBS  = traceRays sd objs lights 
           w       = vWidth $ sViewPlane sd

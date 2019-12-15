@@ -8,8 +8,8 @@ import           Objects
 
 import           Data.Vector   as Vec
 import           Linear
-import           Linear.Matrix
-import           Linear.Metric
+-- import           Linear.Matrix
+-- import           Linear.Metric
 import           PLY
 import           PLY.Types
 
@@ -54,20 +54,21 @@ loadMesh file = do
 applyTransformMesh :: M44 Float -> Mesh -> Mesh
 applyTransformMesh matrix (Mesh vs is) = Mesh (Vec.map transformFunc vs) is
   where
-    transformFunc (VertexAttrib pos norm) =
-      VertexAttrib (applyTransformPoint matrix pos) norm
+    transformFunc (VertexAttrib pos n) =
+      VertexAttrib (applyTransformPoint matrix pos) n
 
 mkTriangles :: Mesh -> MaterialDesc -> [Triangle]
 mkTriangles (Mesh vs is) mat = aux vs is
   where
     aux :: Vec.Vector VertexAttrib -> [V3 Int] -> [Triangle]
-    aux verts [] = []
-    aux verts ((V3 x y z):is) =
-      Triangle v0 v1 v2 mat n : aux verts is
+    aux _     [] = []
+    aux verts (V3 x y z : inds) =
+      Triangle v0 v1 v2 mat n : aux verts inds
       where v0 = verts ! x
             v1 = verts ! y
             v2 = verts ! z
-            n  = normalize $ ((vNormal v0) + (vNormal v1) + (vNormal v2)) / 3
+            -- n  = normalize $ (vNormal v0 + vNormal v1 + vNormal v2) / 3
+            n  = normalize $ cross (vPosition v1 - vPosition v0) (vPosition v2 - vPosition v0)
 
 objectDescToTriangles :: M44 Float -> ObjectDesc -> IO [Triangle]
 -- objectDescToTriangles view od = do
@@ -76,10 +77,10 @@ objectDescToTriangles :: M44 Float -> ObjectDesc -> IO [Triangle]
   --        meshCam = applyTransformMesh (view !*! world) mesh
   --    return $ mkTriangles meshCam $ oMaterial od
 objectDescToTriangles view (ODMesh path mat tform) = 
-  do mesh <- loadMesh $ path
-     let world = worldMatrix $ tform
+  do mesh <- loadMesh path
+     let world = worldMatrix tform
          meshCam = applyTransformMesh (view !*! world) mesh
-     return $ mkTriangles meshCam $ mat
+     return $ mkTriangles meshCam mat
 objectDescToTriangles _ _ = error "Invalid Object Description"
 
 
@@ -87,7 +88,7 @@ objectDescToSphere :: M44 Float -> ObjectDesc -> Sphere
 -- objectDescToSphere view od = Sphere c (oRadius od) (oMaterial od)
 --   where c = applyTransformPoint view $ oCenter od
 objectDescToSphere view (ODSphere mat c r) = Sphere cen r mat
-  where cen = applyTransformPoint view $ c
+  where cen = applyTransformPoint view c
 objectDescToSphere _    _                  = error "Invalid Object Description"
 
 objectDescsToObjects :: M44 Float -> [ObjectDesc] -> IO [Object]

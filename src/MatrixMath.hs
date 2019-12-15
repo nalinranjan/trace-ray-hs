@@ -37,7 +37,7 @@ applyTransformPoint :: M44 Float -> V3 Float -> V3 Float
 applyTransformPoint matrix = normalizePoint . (matrix !*) . point
 
 reflect :: V3 Float -> V3 Float -> V3 Float
-reflect v n = v - n * vec
+reflect v n = normalize $ v - n * vec
   where vDotN = dot v n
         vec   = toV3 $ 2 * vDotN
 

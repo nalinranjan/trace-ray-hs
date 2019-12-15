@@ -6,8 +6,6 @@ import           PixelOps
 import           MatrixMath
 
 import           Data.Colour.SRGB.Linear
--- import           Data.Colour.Internal
--- import           Data.Colour.RGBSpace
 import           Data.Maybe
 import           Linear.V3
 import           Linear.Metric as LM
@@ -25,19 +23,27 @@ data Intersection =
   deriving (Eq, Show)
 
 
-radiance :: Ray -> [Object] -> [LightDesc] -> BS.ByteString -> V3 Float -> RGB Float -> BS.ByteString
-radiance r objs ls bg eye amb
+radiance :: Int -> Ray -> [Object] -> [LightDesc] -> RGB Float -> V3 Float -> RGB Float -> RGB Float
+radiance depth ray objs ls bg eye amb
   | Prelude.null ds = bg
-  | otherwise       = rgbToByteString $ clampRGB $ totalRad
+  | otherwise       = let c = totalRad
+                          ref = if depth > 0 && kr > 0.0
+                                   then scaleRGB kr $ radiance (pred depth) refRay objs ls bg eye amb
+                                   else RGB 0 0 0
+                      in c !+! ref
+                      -- in c
   where
-    ds       = mapMaybe (intersect r) objs
+    ds       = mapMaybe (intersect ray) objs
     (t, obj) = Prelude.minimum ds
     mat      = material obj
-    intPt    = (rOrigin r) + (toV3 t) * (rDirection r)
+    kr       = mKr mat
+    kt       = mKt mat
+    intPt    = (rOrigin ray) + (toV3 t) * (rDirection ray)
     n        = normal intPt obj
     v        = normalize $ eye - intPt
     lrs      = mapMaybe calcIntersection ls
     rads     = [phong mat (Intersection n v l r) lt | (lt, l, r) <- lrs]
+    refRay   = Ray intPt $ reflect (rDirection ray) n
     totalRad = amb !+! Prelude.foldr (!+!) (RGB 0 0 0) rads
     calcIntersection lt = if inShadow intPt objs lt
                           then Nothing
@@ -46,7 +52,7 @@ radiance r objs ls bg eye amb
 
 getLightV3 :: V3 Float -> V3 Float -> LightDesc -> (V3 Float, V3 Float)
 getLightV3 int n lt = (l, r)
-  where l = normalize $ (lPosition lt) - int
+  where l = normalize $ lPosition lt - int
         r = reflect (-l) n
 
 inShadow :: V3 Float -> [Object] -> LightDesc -> Bool
@@ -64,18 +70,19 @@ mkRay w h d i j = Ray (V3 0 0 0) (normalize (V3 x y z))
 traceRays :: SceneDesc -> [Object] -> [LightDesc] -> [[BS.ByteString]]
 -- traceRays (ViewPlaneDesc w h d _) bg objs ls eye =
 traceRays sd objs ls =
-  [ [radiance (mkRay' i j) objs ls bg' eye amb | i <- [0 .. (w - 1)] ] | j <- [0 .. (h - 1)] ] 
+  [ [rgbToByteString $ clampRGB $ radiance mdep (mkRay' i j) objs ls bg eye amb
+    | i <- [0 .. (w - 1)] ] | j <- [0 .. (h - 1)] ] 
     `using` parList rdeepseq
   where
-    (ViewPlaneDesc w h d _) = sViewPlane sd
-    bg'                     = rgbToByteString $ sBgColor sd
-    eye                     = cEyePoint $ sCamera sd
-    mkRay'                  = mkRay w h d
-    amb                     = sAmbient sd
-    -- bg'                     = rgbToByteString bg
+    (ViewPlaneDesc w h d mdep) = sViewPlane sd
+    bg                         = sBgColor sd
+    eye                        = cEyePoint $ sCamera sd
+    mkRay'                     = mkRay w h d
+    amb                        = sAmbient sd
 
 phong :: MaterialDesc -> Intersection -> LightDesc -> RGB Float
-phong mat int l = clampRGB $ scaleRGB (diffuse + specular) color
+-- phong mat int l = clampRGB $ scaleRGB (diffuse + specular) color
+phong mat int l = scaleRGB (diffuse + specular) color
   where diffColor = mDiffuseColor mat
         light     = lColor l
         lDotN     = LM.dot (iLight int) (iNormal int)
