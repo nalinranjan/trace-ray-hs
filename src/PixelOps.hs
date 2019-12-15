@@ -8,6 +8,9 @@ import           Data.ByteString as BS
 import           Data.Word
 
 
+{-
+  This generates an Orphan instance warning.
+-}
 instance Ord (RGB Float) where
   (RGB r1 g1 b1) <= (RGB r2 g2 b2) = r1 <= r2 && g1 <= g2 && b1 <= b2
 

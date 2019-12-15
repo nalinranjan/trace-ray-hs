@@ -13,14 +13,23 @@ import           Data.Yaml               as Yaml
 import           Linear
 
 
+{-
+  This generates an Orphan instance warning.
+-}
 instance Yaml.FromJSON (V3 Float) where
   parseJSON (Yaml.String s) = return (read (Text.unpack s))
   parseJSON _               = fail "expected string for V3"
 
+{-
+  This generates an Orphan instance warning.
+-}
 instance Yaml.FromJSON (RGB Float) where
   parseJSON (Yaml.String s) = return (read (Text.unpack s))
   parseJSON _               = fail "expected string for RGB"
 
+{-
+  This generates an Orphan instance warning.
+-}
 instance Yaml.FromJSON (Quaternion Float) where
   parseJSON (Yaml.String s) = return (read (Text.unpack s))
   parseJSON _               = fail "expected string for Quaternion"
@@ -34,6 +43,9 @@ data CameraDesc =
     }
   deriving (Eq, Show)
 
+{-
+  This generates an Orphan instance warning.
+-}
 instance Yaml.FromJSON CameraDesc where
   parseJSON (Yaml.Object cd) =
     CameraDesc <$> cd Yaml..: "eyePoint" 
@@ -51,6 +63,9 @@ data ViewPlaneDesc =
     }
   deriving (Eq, Show)
 
+{-
+  This generates an Orphan instance warning.
+-}
 instance Yaml.FromJSON ViewPlaneDesc where
   parseJSON (Yaml.Object vpd) =
     ViewPlaneDesc <$> vpd Yaml..: "width" 
@@ -69,6 +84,9 @@ data LightDesc =
     }
   deriving (Eq, Show)
 
+{-
+  This generates an Orphan instance warning.
+-}
 instance Yaml.FromJSON LightDesc where
   parseJSON (Yaml.Object ld) =
     LightDesc <$> ld Yaml..: "type" 
@@ -88,6 +106,9 @@ data MaterialDesc =
     }
   deriving (Eq, Show, Ord)
 
+{-
+  This generates an Orphan instance warning.
+-}
 instance Yaml.FromJSON MaterialDesc where
   parseJSON (Yaml.Object md) =
     MaterialDesc <$> md Yaml..: "diffuseColor" 
@@ -106,6 +127,9 @@ data TransformDesc =
     }
   deriving (Eq, Show)
 
+{-
+  This generates an Orphan instance warning.
+-}
 instance Yaml.FromJSON TransformDesc where
   parseJSON (Yaml.Object td) =
     TransformDesc <$> td Yaml..: "translation" 
@@ -119,6 +143,9 @@ data ObjectDesc =
   ODSphere MaterialDesc (V3 Float) Float
   deriving (Eq, Show)
 
+{-
+  This generates an Orphan instance warning.
+-}
 instance Yaml.FromJSON ObjectDesc where
   parseJSON (Yaml.Object od) =
     do typ <- od Yaml..: "type"
@@ -146,6 +173,9 @@ data SceneDesc =
     }
   deriving (Eq, Show)
 
+{-
+  This generates an Orphan instance warning.
+-}
 instance Yaml.FromJSON SceneDesc where
   parseJSON (Yaml.Object sd) =
     SceneDesc <$> sd Yaml..: "camera" 
