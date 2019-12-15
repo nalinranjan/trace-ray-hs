@@ -42,6 +42,7 @@ executables:
     - -threaded
     - -rtsopts
     - -with-rtsopts=-N
+    - -Wall
     dependencies:
     - trace-ray-hs
 
@@ -55,3 +56,4 @@ tests:
     - -with-rtsopts=-N
     dependencies:
     - trace-ray-hs
+    - HUnit

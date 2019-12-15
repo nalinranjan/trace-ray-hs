@@ -4,7 +4,7 @@ cabal-version: 1.12
 --
 -- see: https://github.com/sol/hpack
 --
--- hash: cacd873a937a70b79758bfb665058c80b5d684d7df19491a553925319c0d3971
+-- hash: 86feb97437805729b52e12d7171bbfca02317f7e42afe2407744c9d8156926fa
 
 name:           trace-ray-hs
 version:        0.1.0.0
@@ -63,7 +63,7 @@ executable trace-ray-hs-exe
       Paths_trace_ray_hs
   hs-source-dirs:
       src
-  ghc-options: -threaded -rtsopts -with-rtsopts=-N
+  ghc-options: -threaded -rtsopts -with-rtsopts=-N -Wall
   build-depends:
       base >=4.7 && <5
     , bmp
@@ -82,12 +82,18 @@ test-suite trace-ray-hs-test
   type: exitcode-stdio-1.0
   main-is: Spec.hs
   other-modules:
+      MatrixMathTests
+      MeshTests
+      ObjectTests
+      PixelOpsTests
+      SceneTests
       Paths_trace_ray_hs
   hs-source-dirs:
       test
   ghc-options: -threaded -rtsopts -with-rtsopts=-N
   build-depends:
-      base >=4.7 && <5
+      HUnit
+    , base >=4.7 && <5
     , bmp
     , bytestring
     , colour >=2.3.5

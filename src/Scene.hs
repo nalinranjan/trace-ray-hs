@@ -1,26 +1,39 @@
 {-# LANGUAGE FlexibleInstances   #-}
 {-# LANGUAGE OverloadedStrings   #-}
 {-# LANGUAGE ScopedTypeVariables #-}
+{-# OPTIONS -Wno-orphans #-}
 
 module Scene where
+
+import           PixelOps()
 
 import           Data.Colour.SRGB.Linear
 import           Data.Text               as Text
 import           Data.Yaml               as Yaml
 import           Linear
-import           Linear.Quaternion
 
+
+{-
+  This generates an Orphan instance warning.
+-}
 instance Yaml.FromJSON (V3 Float) where
   parseJSON (Yaml.String s) = return (read (Text.unpack s))
   parseJSON _               = fail "expected string for V3"
 
+{-
+  This generates an Orphan instance warning.
+-}
 instance Yaml.FromJSON (RGB Float) where
   parseJSON (Yaml.String s) = return (read (Text.unpack s))
   parseJSON _               = fail "expected string for RGB"
 
+{-
+  This generates an Orphan instance warning.
+-}
 instance Yaml.FromJSON (Quaternion Float) where
   parseJSON (Yaml.String s) = return (read (Text.unpack s))
   parseJSON _               = fail "expected string for Quaternion"
+
 
 data CameraDesc =
   CameraDesc
@@ -30,12 +43,16 @@ data CameraDesc =
     }
   deriving (Eq, Show)
 
+{-
+  This generates an Orphan instance warning.
+-}
 instance Yaml.FromJSON CameraDesc where
   parseJSON (Yaml.Object cd) =
     CameraDesc <$> cd Yaml..: "eyePoint" 
                <*> cd Yaml..: "lookAt" 
                <*> cd Yaml..: "up"
   parseJSON _ = fail "Expected object for CameraDesc"
+
 
 data ViewPlaneDesc =
   ViewPlaneDesc
@@ -46,6 +63,9 @@ data ViewPlaneDesc =
     }
   deriving (Eq, Show)
 
+{-
+  This generates an Orphan instance warning.
+-}
 instance Yaml.FromJSON ViewPlaneDesc where
   parseJSON (Yaml.Object vpd) =
     ViewPlaneDesc <$> vpd Yaml..: "width" 
@@ -54,18 +74,6 @@ instance Yaml.FromJSON ViewPlaneDesc where
                   <*> vpd Yaml..: "maxDepth"
   parseJSON _ = fail "Expected object for ViewPlaneDesc"
 
--- data AmbientDesc =
---   AmbientDesc
---     { aColor    :: RGB Float
---     , aStrength :: Float
---     }
---   deriving (Eq, Show)
-
--- instance Yaml.FromJSON AmbientDesc where
---   parseJSON (Yaml.Object ad) =
---     AmbientDesc <$> ad Yaml..: "color" 
---                 <*> ad Yaml..: "strength"
---   parseJSON _ = fail "Expected object for AmbientDesc"
 
 data LightDesc =
   LightDesc
@@ -76,6 +84,9 @@ data LightDesc =
     }
   deriving (Eq, Show)
 
+{-
+  This generates an Orphan instance warning.
+-}
 instance Yaml.FromJSON LightDesc where
   parseJSON (Yaml.Object ld) =
     LightDesc <$> ld Yaml..: "type" 
@@ -84,8 +95,6 @@ instance Yaml.FromJSON LightDesc where
               <*> ld Yaml..: "position"
   parseJSON _ = fail "Expected object for LightDesc"
 
-instance Ord (RGB Float) where
-  (RGB r1 g1 b1) <= (RGB r2 g2 b2) = r1 <= r2 && g1 <= g2 && b1 <= b2
 
 data MaterialDesc =
   MaterialDesc
@@ -93,16 +102,22 @@ data MaterialDesc =
     , mKr           :: Float
     , mKt           :: Float
     , mAlpha        :: Float
+    , mIoR          :: Float
     }
   deriving (Eq, Show, Ord)
 
+{-
+  This generates an Orphan instance warning.
+-}
 instance Yaml.FromJSON MaterialDesc where
   parseJSON (Yaml.Object md) =
     MaterialDesc <$> md Yaml..: "diffuseColor" 
                  <*> md Yaml..: "kr"
                  <*> md Yaml..: "kt"
                  <*> md Yaml..: "alpha"
+                 <*> md Yaml..: "ior"
   parseJSON _ = fail "Expected object for MaterialDesc"
+
 
 data TransformDesc =
   TransformDesc
@@ -112,6 +127,9 @@ data TransformDesc =
     }
   deriving (Eq, Show)
 
+{-
+  This generates an Orphan instance warning.
+-}
 instance Yaml.FromJSON TransformDesc where
   parseJSON (Yaml.Object td) =
     TransformDesc <$> td Yaml..: "translation" 
@@ -119,27 +137,17 @@ instance Yaml.FromJSON TransformDesc where
                   <*> td Yaml..: "scale"
   parseJSON _ = fail "Expected object for TransformDesc"
 
+
 data ObjectDesc =
   ODMesh FilePath MaterialDesc TransformDesc |
   ODSphere MaterialDesc (V3 Float) Float
-  -- ObjectDesc
-  --   { oType      :: String
-  --   , oPath      :: FilePath
-  --   , oMaterial  :: MaterialDesc
-  --   , oTransform :: TransformDesc
-  --   , oCenter    :: V3 Float
-  --   , oRadius    :: Float
-  --   }
   deriving (Eq, Show)
 
+{-
+  This generates an Orphan instance warning.
+-}
 instance Yaml.FromJSON ObjectDesc where
   parseJSON (Yaml.Object od) =
-    -- ObjectDesc <$> od Yaml..: "type" 
-    --            <*> od Yaml..: "path" 
-    --            <*> od Yaml..: "material" 
-    --            <*> od Yaml..: "transform"
-    --            <*> od Yaml..: "center"
-    --            <*> od Yaml..: "radius"
     do typ <- od Yaml..: "type"
        case typ :: String of
          "mesh"   -> ODMesh <$> od Yaml..: "path"
@@ -151,6 +159,7 @@ instance Yaml.FromJSON ObjectDesc where
          t        -> fail $ "Unexpected object type: " ++ t
   parseJSON _ = fail "Expected object for ObjectDesc"
 
+
 data SceneDesc =
   SceneDesc
     { sCamera     :: CameraDesc
@@ -158,13 +167,15 @@ data SceneDesc =
     , sBgColor    :: RGB Float
     , sShadows    :: Bool
     , sOutputFile :: FilePath
-    -- , sAmbient    :: AmbientDesc
     , sAmbient    :: RGB Float
     , sLights     :: [LightDesc]
     , sObjects    :: [ObjectDesc]
     }
   deriving (Eq, Show)
 
+{-
+  This generates an Orphan instance warning.
+-}
 instance Yaml.FromJSON SceneDesc where
   parseJSON (Yaml.Object sd) =
     SceneDesc <$> sd Yaml..: "camera" 

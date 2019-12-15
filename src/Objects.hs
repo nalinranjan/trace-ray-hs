@@ -3,47 +3,44 @@
 module Objects where
 
 import           Scene
-import           MatrixMath
 
 import           Linear.V3
 import           Linear
-import           Linear.Matrix
-import           Linear.Metric
 
 
 data Ray =
   Ray
     { rOrigin    :: V3 Float
     , rDirection :: V3 Float
+    , rIoR       :: Float
     }
   deriving (Eq, Show)
 
+epsilon :: Float
+epsilon = 0.1
 
 class SceneObject a where
   intersect :: Ray -> a -> Maybe (Float, Object)
   material :: a -> MaterialDesc
   normal :: V3 Float -> a -> V3 Float
 
+
 data Object where
-  Object :: (SceneObject a, Ord a) => a -> Object
-  -- OTriangle :: Triangle -> Object Triangle
-  -- OSphere   :: Sphere   -> Object Sphere
+  Object :: (SceneObject a, Ord a, Show a) => a -> Object
+
+instance Show Object where
+  show (Object o) = show o
 
 instance Eq Object where
-  (Object o1) == (Object o2) = False
+  (Object _) == (Object _) = False
 
 instance Ord Object where
-  (Object o1) <= (Object o2) = True
+  (Object _) <= (Object _) = True
 
 instance SceneObject Object where
   intersect r (Object o) = intersect r o
   material    (Object o) = material o
   normal    i (Object o) = normal i o
-
-
--- instance SceneObject a => SceneObject (Object a) where
---   intersect ray (OTriangle t) = intersect ray t
---   intersect ray (OSphere   s) = intersect ray s
 
 
 data VertexAttrib =
@@ -52,7 +49,6 @@ data VertexAttrib =
     , vNormal   :: V3 Float
     }
   deriving (Eq, Show, Ord)
-
 
 data Triangle =
   Triangle
@@ -65,11 +61,11 @@ data Triangle =
   deriving (Eq, Show, Ord)
 
 instance SceneObject Triangle where
-  intersect (Ray o d) tri@(Triangle v0 v1 v2 _ _)
-    | pDote1 == 0 = Nothing
-    | t < 0.1 = Nothing
+  intersect (Ray o d _) tri@(Triangle v0 v1 v2 _ _)
+    | pDote1 == 0                 = Nothing
+    | t < epsilon                 = Nothing
     | u < 0 || v < 0 || u + v > 1 = Nothing
-    | otherwise = Just (t, Object tri)
+    | otherwise                   = Just (t, Object tri)
     where
       v0pos = vPosition v0
       v1pos = vPosition v1
@@ -87,6 +83,7 @@ instance SceneObject Triangle where
   material = tMat
   normal _ = tNormal
 
+
 data Sphere =
   Sphere
     { sCenter :: V3 Float
@@ -94,12 +91,13 @@ data Sphere =
     , sMat    :: MaterialDesc
     }
   deriving (Eq, Show, Ord)
-      
+
 instance SceneObject Sphere where
-  intersect (Ray o d) sph@(Sphere c r _) 
-    | dInt < 0  = Nothing
-    | w1 > 0.1 = Just (w1, Object sph)
-    | otherwise = Just (w2, Object sph)
+  intersect (Ray o d _) sph@(Sphere c r _) 
+    | dInt < 0     = Nothing
+    | w1 > epsilon = Just (w1, Object sph)
+    | w2 > epsilon = Just (w2, Object sph)
+    | otherwise    = Nothing
     where 
       cToO  = o - c 
       bInt  = dot d cToO * 2
@@ -111,7 +109,3 @@ instance SceneObject Sphere where
 
   material = sMat
   normal pt (Sphere c _ _) = normalize $ pt - c
-
-
-transformLight :: M44 Float -> LightDesc -> LightDesc
-transformLight m (LightDesc t s c p) = LightDesc t s c $ applyTransformPoint m p

@@ -4,56 +4,64 @@ camera:
     up: V3 0 1 0
 
 viewPlane:
-    width: 600
-    height: 400
-    dist: 500
-    maxDepth: 10
+    width: 1200
+    height: 1200
+    dist: 1000
+    maxDepth: 5
 
-bgColor: RGB {channelRed = 0.0, channelGreen = 0.0, channelBlue = 0.0}
+bgColor: RGB {channelRed = 0.392, channelGreen = 0.584, channelBlue = 0.929}
 shadows: true
-outputFile: renders/world.bmp
+outputFile: renders/table.bmp
 
 ambient: RGB {channelRed = 0.1, channelGreen = 0.1, channelBlue = 0.1}
-# ambient:
-#     color: RGB {channelRed = 1.0, channelGreen = 1.0, channelBlue = 1.0}
-#     strength: 1
 
 lights:
     - type: point
       strength: 1
-      color: RGB {channelRed = 1.0, channelGreen = 1.0, channelBlue = 1.0}
-      position: V3 -500 1000 -10
+      color: RGB {channelRed = 0.8, channelGreen = 0.8, channelBlue = 0.8}
+      position: V3 600 800 -800
+    - type: point
+      strength: 1
+      color: RGB {channelRed = 0.8, channelGreen = 0.8, channelBlue = 0.8}
+      position: V3 -600 800 -2000
 
 objects:
     - type: mesh
       path: meshes/table.ply
       material:
           diffuseColor: RGB {channelRed = 0.961, channelGreen = 0.851, channelBlue = 0.651}
+        #   diffuseColor: RGB {channelRed = 0.0, channelGreen = 0.0, channelBlue = 0.0}
           kr: 0
           kt: 0
-          alpha: 20
+          alpha: 200
+          ior : 1
       transform:
           translation: V3 0 -1300 -2000
           rotation: Quaternion 1 (V3 0 0 0)
           scale: V3 350 350 350
-    # - type: mesh
-    #   path: meshes/cube.ply
-    #   material:
-    #       type: matte
-    #       diffuseColor: RGB {channelRed = 0.66, channelGreen = 0.46, channelBlue = 0.86}
-    #   transform:
-    #       translation: V3 650 200 -2000
-    #       rotation: Quaternion 1 (V3 0 0 0)
-    #       scale: V3 200 200 200
+    - type: mesh
+      path: meshes/cube.ply
+      material:
+          diffuseColor: RGB {channelRed = 0.0, channelGreen = 0.0, channelBlue = 0.0}
+          kr: 0
+          kt: 0.8
+          alpha: 200
+          ior: 1.5
+      transform:
+          translation: V3 0 100 -1500
+          rotation: Quaternion 1 (V3 0 0 0)
+          scale: V3 75 75 75
     # - type: mesh
     #   path: meshes/earth.ply
     #   material:
-    #       type: matte
-    #       diffuseColor: RGB {channelRed = 0.023, channelGreen = 0.5, channelBlue = 0.29}
+    #       diffuseColor: RGB {channelRed = 0.6, channelGreen = 0.6, channelBlue = 0.9}
+    #       kr: 0
+    #       kt: 0
+    #       alpha: 20
     #   transform:
-    #       translation: V3 -700 200 -2500
+    #       translation: V3 220 220 -1800
     #       rotation: Quaternion 0.93 (V3 0.366 0 0)
-    #       scale: V3 500 500 500
+    #       scale: V3 100 100 100
     - type: mesh
       path: meshes/monkey.ply
       material:
@@ -61,27 +69,20 @@ objects:
           kr: 0
           kt: 0
           alpha: 20
+          ior: 1
       transform:
-          translation: V3 0 400 -1800
+          translation: V3 -100 200 -1800
           rotation: Quaternion 0.995 (V3 0 0.098 0)
           scale: V3 100 100 100
-    - type: mesh
-      path: meshes/dragon.ply
+    - type: sphere
       material:
-          diffuseColor: RGB {channelRed = 1.0, channelGreen = 0.843, channelBlue = 0.0}
-          kr: 0
+          diffuseColor: RGB {channelRed = 0.0, channelGreen = 0.0, channelBlue = 0.0}
+          kr: 0.8
           kt: 0
-          alpha: 20
-      transform:
-          translation: V3 -100 100 -1600
-          rotation: Quaternion 1 (V3 0 0 0)
-          scale: V3 1500 1500 1500
-    # - type: sphere
-    #   material:
-    #       type: matte
-    #       diffuseColor: RGB {channelRed = 0.0, channelGreen = 1.0, channelBlue = 0.0}
-    #   center: V3 0 -1000 -3000
-    #   radius: 500
+          alpha: 200
+          ior: 1
+      center: V3 220 220 -1800
+      radius: 100
     # - type: mesh
     #   path: meshes/dragon.ply
     #   material:
