@@ -14,9 +14,6 @@ shadows: true
 outputFile: renders/table.bmp
 
 ambient: RGB {channelRed = 0.1, channelGreen = 0.1, channelBlue = 0.1}
-# ambient:
-#     color: RGB {channelRed = 1.0, channelGreen = 1.0, channelBlue = 1.0}
-#     strength: 1
 
 lights:
     - type: point

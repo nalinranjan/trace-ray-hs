@@ -3,7 +3,6 @@ module RayTracer where
 import           Objects
 import           Scene
 import           PixelOps
-import           MatrixMath
 
 import           Data.Colour.SRGB.Linear
 import           Data.Maybe
@@ -34,7 +33,6 @@ radiance depth ray objs ls bg eye amb
                                   then scaleRGB kt $ radiance (pred depth) transRay objs ls bg eye amb
                                   else RGB 0 0 0
                       in c !+! ref !+! trans
-                      -- in c
   where
     ds          = mapMaybe (intersect ray) objs
     (t, obj)    = Prelude.minimum ds
@@ -58,6 +56,7 @@ radiance depth ray objs ls bg eye amb
                           else Just (lt, l, r)
       where (l,r) = getLightV3 intPt n lt
 
+
 getLightV3 :: V3 Float -> V3 Float -> LightDesc -> (V3 Float, V3 Float)
 getLightV3 int n lt = (l, r)
   where l = normalize $ lPosition lt - int
@@ -74,9 +73,7 @@ mkRay w h d i j = Ray (V3 0 0 0) (normalize (V3 x y z)) 1
     y = (fromIntegral $ - (h `div` 2) + j :: Float) + 0.5
     z = - d
 
--- traceRays :: ViewPlaneDesc -> RGB Float -> [Object] -> [LightDesc] -> V3 Float -> [[ByteString]]
 traceRays :: SceneDesc -> [Object] -> [LightDesc] -> [[BS.ByteString]]
--- traceRays (ViewPlaneDesc w h d _) bg objs ls eye =
 traceRays sd objs ls =
   [ [rgbToByteString $ clampRGB $ radiance mdep (mkRay' i j) objs ls bg eye amb
     | i <- [0 .. (w - 1)] ] | j <- [0 .. (h - 1)] ] 
@@ -88,8 +85,8 @@ traceRays sd objs ls =
     mkRay'                     = mkRay w h d
     amb                        = sAmbient sd
 
+
 phong :: MaterialDesc -> Intersection -> LightDesc -> RGB Float
--- phong mat int l = clampRGB $ scaleRGB (diffuse + specular) color
 phong mat int l = scaleRGB (diffuse + specular) color
   where diffColor = mDiffuseColor mat
         light     = lColor l
@@ -98,3 +95,25 @@ phong mat int l = scaleRGB (diffuse + specular) color
         color     = multRGB light diffColor
         diffuse   = lDotN
         specular  = rDotV ** (mAlpha mat)
+
+
+reflect :: V3 Float -> V3 Float -> V3 Float
+reflect v n = normalize $ v - n * vec
+  where vDotN = LM.dot v n
+        vec   = toV3 $ 2 * vDotN
+
+transmit :: V3 Float -> V3 Float -> Float -> Float -> (V3 Float, Bool)
+transmit v n u1 u2 
+  | u1 == u2  = (v, False)
+  | tir > 1   = (reflect v (-n'), True)
+  | otherwise = (normalize (a + b), False)
+  where n'      = if LM.dot v n > 0 then n else -n
+        u1Divu2 = u1 / u2
+        vDotN   = LM.dot v n'
+        tir     = u1Divu2 * u1Divu2 * (1 - vDotN * vDotN)
+        a       = toV3 u1Divu2 * (v - toV3 vDotN * n')
+        b       = toV3 (sqrt (1 - tir)) * n'
+
+
+toV3 :: Float -> V3 Float
+toV3 x = V3 x x x
