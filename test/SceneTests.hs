@@ -5,7 +5,6 @@ module SceneTests where
 import           Scene
 import           System.IO
 import           Test.HUnit
-import           Text.Printf
 import           Data.Yaml
 import           Linear.V3
 
