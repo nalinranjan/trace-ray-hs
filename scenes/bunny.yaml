@@ -13,7 +13,7 @@ bgColor: RGB {channelRed = 0.26, channelGreen = 0.878, channelBlue = 0.96}
 shadows: true
 outputFile: renders/bunny.bmp
 
-ambient: RGB {channelRed = 1.0, channelGreen = 1.0, channelBlue = 1.0}
+ambient: RGB {channelRed = 0.1, channelGreen = 0.1, channelBlue = 0.1}
 
 lights:
     - type: point
