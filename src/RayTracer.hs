@@ -22,15 +22,15 @@ data Intersection =
   deriving (Eq, Show)
 
 
-radiance :: Int -> Ray -> [Object] -> [LightDesc] -> RGB Float -> V3 Float -> RGB Float -> RGB Float
-radiance depth ray objs ls bg eye amb
+radiance :: Int -> Ray -> [Object] -> [LightDesc] -> RGB Float -> V3 Float -> RGB Float
+radiance depth ray objs ls bg eye
   | Prelude.null ds = bg
   | otherwise       = let c = totalRad
                           ref = if depth > 0 && kr > 0
-                                then scaleRGB kr $ radiance (pred depth) refRay objs ls bg eye amb
+                                then scaleRGB kr $ radiance (pred depth) refRay objs ls bg eye
                                 else RGB 0 0 0
                           trans = if depth > 0 && kt > 0
-                                  then scaleRGB kt $ radiance (pred depth) transRay objs ls bg eye amb
+                                  then scaleRGB kt $ radiance (pred depth) transRay objs ls bg eye
                                   else RGB 0 0 0
                       in c !+! ref !+! trans
   where
@@ -47,7 +47,7 @@ radiance depth ray objs ls bg eye amb
     v           = normalize $ eye - intPt
     lrs         = mapMaybe calcIntersection ls
     rads        = [phong mat (Intersection n v l r) lt | (lt, l, r) <- lrs]
-    totalRad    = amb !+! Prelude.foldr (!+!) (RGB 0 0 0) rads
+    totalRad    = Prelude.foldr (!+!) (RGB 0 0 0) rads
     refRay      = Ray intPt (reflect (rDirection ray) n) u1
     (tDir, tir) = transmit (rDirection ray) n u1 u2
     transRay    = Ray intPt tDir $ if tir then u1 else u2
@@ -75,7 +75,7 @@ mkRay w h d i j = Ray (V3 0 0 0) (normalize (V3 x y z)) 1
 
 traceRays :: SceneDesc -> [Object] -> [LightDesc] -> [[BS.ByteString]]
 traceRays sd objs ls =
-  [ [rgbToByteString $ clampRGB $ radiance mdep (mkRay' i j) objs ls bg eye amb
+  [ [rgbToByteString $ clampRGB $ amb !+! radiance mdep (mkRay' i j) objs ls bg eye
     | i <- [0 .. (w - 1)] ] | j <- [0 .. (h - 1)] ] 
     `using` parList rdeepseq
   where

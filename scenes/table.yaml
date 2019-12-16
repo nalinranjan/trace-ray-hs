@@ -13,7 +13,7 @@ bgColor: RGB {channelRed = 0.392, channelGreen = 0.584, channelBlue = 0.929}
 shadows: true
 outputFile: renders/table.bmp
 
-ambient: RGB {channelRed = 0.1, channelGreen = 0.1, channelBlue = 0.1}
+ambient: RGB {channelRed = 0.2, channelGreen = 0.2, channelBlue = 0.2}
 
 lights:
     - type: point
@@ -38,7 +38,7 @@ objects:
       transform:
           translation: V3 0 -1300 -2000
           rotation: Quaternion 1 (V3 0 0 0)
-          scale: V3 350 350 350
+          scale: V3 500 350 350
     - type: mesh
       path: meshes/cube.ply
       material:
@@ -48,7 +48,7 @@ objects:
           alpha: 200
           ior: 1.5
       transform:
-          translation: V3 0 100 -1500
+          translation: V3 230 200 -1500
           rotation: Quaternion 1 (V3 0 0 0)
           scale: V3 75 75 75
     # - type: mesh
@@ -83,6 +83,16 @@ objects:
           ior: 1
       center: V3 220 220 -1800
       radius: 100
+    - type: sphere
+      material:
+          diffuseColor: RGB {channelRed = 0.0, channelGreen = 0.1, channelBlue = 0.2}
+          kr: 0
+          kt: 0.9
+          alpha: 200
+          ior: 1.33
+      center: V3 -220 220 -1400
+      radius: 150
+    
     # - type: mesh
     #   path: meshes/dragon.ply
     #   material:
