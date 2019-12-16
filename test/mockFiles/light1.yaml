@@ -1,0 +1,4 @@
+type: point
+strength: 1
+color: RGB {channelRed = 1.0, channelGreen = 1.0, channelBlue = 1.0}
+position: V3 -500 1000 -10

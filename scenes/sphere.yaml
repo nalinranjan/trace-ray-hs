@@ -13,9 +13,7 @@ bgColor: RGB {channelRed = 0.26, channelGreen = 0.878, channelBlue = 0.96}
 shadows: true
 outputFile: renders/sphere.bmp
 
-ambient:
-    color: RGB {channelRed = 1.0, channelGreen = 1.0, channelBlue = 1.0}
-    strength: 1
+ambient: RGB {channelRed = 1.0, channelGreen = 1.0, channelBlue = 1.0}
 
 lights:
     - type: point
@@ -26,7 +24,10 @@ lights:
 objects:
     - type: sphere
       material:
-          type: matte
           diffuseColor: RGB {channelRed = 0.76, channelGreen = 0.56, channelBlue = 0.96}
+          kr: 0
+          kt: 0
+          alpha: 200
+          ior: 1
       center: V3 0 0 -700
       radius: 200

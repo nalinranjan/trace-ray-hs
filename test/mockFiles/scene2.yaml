@@ -1,0 +1,60 @@
+camera:
+    eyePoint: V3 0 600 0
+    lookAt: V3 0 0 -2000
+    up: V3 0 1 0
+
+viewPlane:
+    width: 1200
+    height: 1200
+    dist: 500
+    maxDepth: 10
+
+shadows: true
+outputFile: renders/wall.bmp
+
+ambient: RGB {channelRed = 0.1, channelGreen = 0.1, channelBlue = 0.1}
+
+lights:
+    - type: point
+      strength: 1
+      color: RGB {channelRed = 0.8, channelGreen = 0.8, channelBlue = 0.8}
+      position: V3 600 800 -800
+    - type: point
+      strength: 1
+      color: RGB {channelRed = 0.8, channelGreen = 0.8, channelBlue = 0.8}
+      position: V3 -600 800 -2000
+
+objects:
+    - type: mesh
+      path: meshes/plane_back.ply
+      material:
+          diffuseColor: RGB {channelRed = 0.961, channelGreen = 0.851, channelBlue = 0.651}
+          kr: 0
+          kt: 0
+          alpha: 200
+          ior: 1
+      transform:
+          translation: V3 0 -1000 -1500
+          rotation: Quaternion 1 (V3 0 0 0)
+          scale: V3 2000 2000 2000
+    - type: mesh
+      path: meshes/plane_bottom.ply
+      material:
+          diffuseColor: RGB {channelRed = 0.52, channelGreen = 0.27, channelBlue = 0.15}
+          kr: 0
+          kt: 0
+          alpha: 200
+          ior: 1
+      transform:
+          translation: V3 0 -1000 -1500
+          rotation: Quaternion 0.995 (V3 0 0.098 0)
+          scale: V3 1000 1000 1000
+    - type: sphere
+      material:
+          diffuseColor: RGB {channelRed = 1.0, channelGreen = 0.843, channelBlue = 0.0}
+          kr: 0
+          kt: 0
+          alpha: 200
+          ior: 1
+      center: V3 0 200 -1000
+      radius: 500

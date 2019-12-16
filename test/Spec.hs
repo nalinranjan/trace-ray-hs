@@ -1,10 +1,11 @@
 {-# OPTIONS -Wall #-}
 
-import SceneTests
-import PixelOpsTests
-import MeshTests
-import MatrixMathTests
-import ObjectTests
+import           SceneTests
+import           PixelOpsTests
+import           MeshTests
+import           MatrixMathTests
+import           ObjectTests
+import           RayTracerTests
 
 main :: IO ()
 main = do sceneTests
@@ -12,3 +13,4 @@ main = do sceneTests
           meshTests
           matrixMathTests
           objectTests
+          rayTracerTests

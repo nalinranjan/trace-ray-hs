@@ -22,8 +22,6 @@ matrixMathTests = do hPutStrLn stdout "\nMatrixMath Tests:\n"
                      _ <- runTestTT worldMatrixTests
                      hPutStrLn stdout "applyTransformPoint Tests:"
                      _ <- runTestTT applyTransformPointTests
-                     hPutStrLn stdout "toV3Tests Tests:"
-                     _ <- runTestTT toV3Tests
                      return ()
 
 viewMatrixTests :: Test
@@ -153,16 +151,3 @@ applyTransformPointTests = TestList [
   (V4 (V4 350.0 0.0 0.0 0.0) (V4 0.0 350.0 0.0 (-1300.0)) (V4 0.0 0.0 350.0 (-2000.0)) (V4 0.0 0.0 0.0 1.0))
   (V3 28.266403 0.0 0.0) 
   ~?= V3 9893.241 (-1300.0) (-2000.0)]
-
-toV3Tests :: Test
-toV3Tests = TestList [
-  toV3 1 ~?= V3 1 1 1,
-  toV3 0 ~?= V3 0 0 0,
-  toV3 9.8 ~?= V3 9.8 9.8 9.8,
-  toV3 5.34 ~?= V3 5.34 5.34 5.34,
-  toV3 0.567 ~?= V3 0.567 0.567 0.567,
-  toV3 8.679 ~?= V3 8.679 8.679 8.679,
-  toV3 (-9.43) ~?= V3 (-9.43) (-9.43) (-9.43),
-  toV3 (-1.23476) ~?= V3 (-1.23476) (-1.23476) (-1.23476),
-  toV3 (-7.536) ~?= V3 (-7.536) (-7.536) (-7.536),
-  toV3 0.68127235 ~?= V3 0.68127235 0.68127235 0.68127235]
