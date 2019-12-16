@@ -4,7 +4,7 @@ cabal-version: 1.12
 --
 -- see: https://github.com/sol/hpack
 --
--- hash: 86feb97437805729b52e12d7171bbfca02317f7e42afe2407744c9d8156926fa
+-- hash: 6318c54072a931369cc3792b9d79ee009f8f31911c8ca36d61c950c28910d9b3
 
 name:           trace-ray-hs
 version:        0.1.0.0
@@ -86,6 +86,7 @@ test-suite trace-ray-hs-test
       MeshTests
       ObjectTests
       PixelOpsTests
+      RayTracerTests
       SceneTests
       Paths_trace_ray_hs
   hs-source-dirs:
